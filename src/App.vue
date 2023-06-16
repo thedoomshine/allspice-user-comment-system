@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import CommentEditor from './components/CommentEditor.vue'
+import IssuePage from '~/components/IssuePage.vue'
 </script>
 
 <template>
-  <header>
+  <header class="app-header">
     <a
       href="#"
       class="nav-item logo"
@@ -43,20 +43,26 @@ import CommentEditor from './components/CommentEditor.vue'
     </nav>
   </header>
 
-  <main>
-    <comment-editor />
-  </main>
+  <issue-page />
 </template>
 
 <style lang="scss">
-header {
+:root {
+  --grid-gutter: minmax(0.25rem, calc(25vw - 16rem));
+  --border-radius: 0.35rem;
+}
+.app-header {
   display: grid;
+  grid-template-columns: var(--grid-gutter) max-content auto var(--grid-gutter);
+  column-gap: 2rem;
   align-items: center;
-  grid-template-columns: calc(25vw - 16rem) max-content auto calc(25vw - 16rem);
-  background-color: var(--color-header-bar);
-  line-height: 1.5;
-  padding: 0.25rem 1rem;
+
   width: 100%;
+  padding: 0.25rem 0;
+
+  line-height: 1.5;
+
+  background-color: var(--color-header-bar);
   border-bottom: 1px solid var(--color-secondary);
 }
 
@@ -71,15 +77,17 @@ header {
 .nav-bar {
   display: flex;
   flex: 1 1 auto;
-  align-items: center;
   gap: 0.35rem;
+  align-items: center;
 }
 
 .nav-item {
-  border-radius: 0.35rem;
   padding: 0.75rem 1rem;
+  color: var(--color-text);
   white-space: nowrap;
+  border-radius: var(--border-radius);
   &:hover {
+    text-decoration: none;
     background: var(--color-hover);
   }
   &__left {
