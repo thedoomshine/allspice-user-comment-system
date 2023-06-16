@@ -5,6 +5,12 @@
   --font-family-serif: Iowan Old Style, Apple Garamond, Baskerville, Times New Roman, Droid Serif,
     Times, Source Serif Pro, serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
 
+  --font-size-h1: 2rem;
+  --font-size-h2: 1.71428571rem;
+  --font-size-h3: 1.28571429rem;
+  --font-size-h4: 1.07142857rem;
+  --font-size-h5: 1rem;
+
   --breakpoints-mobile: 768px;
   --breakpoints-laptop: 1280px;
   --breakpoints-desktop: 1600px;

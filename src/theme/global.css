@@ -3,7 +3,6 @@
 
 html {
   display: flex;
-  background-color: var(--color-body);
 
   width: 100%;
   min-height: 100vh;
@@ -14,6 +13,7 @@ html {
   text-size-adjust: 100%;
 
   color-scheme: dark;
+  background-color: var(--color-body);
 
   -webkit-font-smoothing: subpixel-antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -29,10 +29,20 @@ body {
   font-family: var(--font-family-sans);
   font-style: normal;
   line-height: 1.15;
+  color: var(--color-text);
 }
 
 #app {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
+}
+
+a {
+  cursor: pointer;
+  color: var(--color-primary);
+  text-decoration-skip-ink: all;
+  &:hover {
+    text-decoration: underline;
+  }
 }
