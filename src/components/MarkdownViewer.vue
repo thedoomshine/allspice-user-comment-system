@@ -1,45 +1,63 @@
 <template>
-    <milkdown />
+  <milkdown />
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
 import { Editor, defaultValueCtx, editorViewOptionsCtx, rootCtx } from '@milkdown/core'
 import { clipboard } from '@milkdown/plugin-clipboard'
 import { cursor } from '@milkdown/plugin-cursor'
 import { history } from '@milkdown/plugin-history'
 import { upload } from '@milkdown/plugin-upload'
-import { commonmark } from '@milkdown/preset-commonmark'
+import { commonmark, listItemSchema } from '@milkdown/preset-commonmark'
 import { gfm } from '@milkdown/preset-gfm'
+import { $view } from '@milkdown/utils'
 import { Milkdown, useEditor } from '@milkdown/vue'
+import { useNodeViewFactory } from '@prosemirror-adapter/vue'
 
-import type { UserProps } from '~/types/index'
+import MarkdownListItem from './MarkdownListItem.vue'
 
-const props = withDefaults(
-  defineProps<{
-    user: UserProps
-    markdown?: string
-    editable?: boolean
-  }>(),
-  {
-    markdown: '',
-    editable: false,
-  }
-)
+const nodeViewFactory = useNodeViewFactory()
 
-useEditor((root) => {
-  return Editor.make()
-    .config((ctx) => {
-      ctx.set(rootCtx, root)
-      ctx.set(defaultValueCtx, props.markdown)
-      ctx.set(editorViewOptionsCtx, { editable: () => props.editable })
-    })
-    .use(commonmark)
-    .use(gfm)
-    .use(clipboard)
-    .use(cursor)
-    .use(history)
-    .use(upload)
-})
+export const useMilkdown = (markdown: string, editable: boolean) => {
+  const editor = useEditor((root) =>
+    Editor.make()
+      .config((ctx) => {
+        ctx.set(rootCtx, root)
+        ctx.set(defaultValueCtx, markdown)
+        ctx.set(editorViewOptionsCtx, { editable: () => editable })
+      })
+      .use(commonmark)
+      .use(gfm)
+      .use(
+        $view(listItemSchema.node, () => nodeViewFactory({ component: MarkdownListItem, as: 'li' }))
+      )
+      .use(clipboard)
+      .use(cursor)
+      .use(history)
+      .use(upload)
+  )
+
+  return editor
+}
+
+export default {
+  props: {
+    markdown: {
+      type: String,
+      default: '',
+    },
+    editable: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  components: {
+    Milkdown,
+  },
+  created() {
+    useMilkdown(this.markdown, this.editable)
+  },
+}
 </script>
 
 <styles lang="scss" scoped>
@@ -53,7 +71,7 @@ useEditor((root) => {
   max-width: 100%;
 
   .editor > :first-child {
-    margin-top: 0 !important;
+    margin-top: 0;
   }
 
   h1,
@@ -66,6 +84,10 @@ useEditor((root) => {
     margin-bottom: 1rem;
     margin-top: 1.5rem;
     line-height: 1.15;
+  }
+
+  h1,
+  h2 {
     border-bottom: solid 1px var(--color-secondary);
   }
 
@@ -119,25 +141,17 @@ useEditor((root) => {
     list-style-type: circle;
   }
 
+  ul ul ul {
+    list-style-type: square;
+  }
+
   ol {
-    list-style-type: none;
-    counter-reset: item;
-    margin: 0;
-    padding: 0;
-    li {
-      counter-increment: item;
-      &::marker {
-        content: counters(item, '.') '. ';
-      }
-      ol li::marker {
-        content: counters(item, '.') ' ';
-      }
-    }
+    list-style-type: numeric;
   }
 
   ol,
   ul {
-    padding-left: 2rem;
+    padding-left: 1.5rem;
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
@@ -145,6 +159,11 @@ useEditor((root) => {
 
   li {
     display: list-item;
+    gap: 0.5rem;
+
+    p {
+      margin: 0;
+    }
   }
 
   strong {
@@ -170,6 +189,90 @@ useEditor((root) => {
     padding: 0;
     margin: 2rem 0;
     background-color: var(--color-secondary);
+  }
+
+  del {
+    text-decoration: line-through;
+  }
+
+  code {
+    font-family: var(--font-family-monospace);
+    font-size: inherit;
+  }
+
+  /* Code in text */
+  p > code,
+  li > code,
+  dd > code,
+  td > code {
+    background: var(--color-black);
+    color: var(--color-white);
+    box-decoration-break: clone;
+    border-radius: var(--border-radius);
+    padding: 0.2em 0.4em;
+    margin: 0;
+    font-size: 90%;
+    white-space: break-spaces;
+  }
+
+  pre {
+    padding: 1rem;
+    overflow: auto;
+    font-size: 90%;
+    line-height: 1.45;
+    color: var(--color-white);
+    background-color: var(--color-black);
+    border-radius: var(--border-radius);
+  }
+
+  pre code {
+    -webkit-overflow-scrolling: touch;
+    font-size: 90%;
+    margin: 0;
+    overflow: visible;
+    padding: 0.2em 0.4em;
+    white-space: break-spaces;
+
+    display: inline;
+    padding: 0;
+    line-height: inherit;
+    word-wrap: normal;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    width: max-content;
+    max-width: 100%;
+    overflow: auto;
+    p {
+      margin: 0;
+    }
+
+    th {
+      font-weight: 600;
+      background-color: var(--color-box-body);
+    }
+
+    th,
+    td {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--color-secondary);
+    }
+
+    tr {
+      background-color: var(--color-box-body);
+      border-top: 1px solid var(--color-secondary);
+
+      &:nth-child(even) {
+        background-color: var(--color-secondary-light-1);
+      }
+    }
+  }
+
+  [data-item-type='task'] {
+    position: relative;
+    padding-left: 1rem;
   }
 }
 </styles>

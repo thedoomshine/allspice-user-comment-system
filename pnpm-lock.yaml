@@ -38,9 +38,18 @@ dependencies:
   '@milkdown/transformer':
     specifier: ^7.2.3
     version: 7.2.3(@milkdown/prose@7.2.3)
+  '@milkdown/utils':
+    specifier: ^7.2.3
+    version: 7.2.3(@milkdown/core@7.2.3)(@milkdown/ctx@7.2.3)(@milkdown/prose@7.2.3)(@milkdown/transformer@7.2.3)
   '@milkdown/vue':
     specifier: ^7.2.3
     version: 7.2.3(@milkdown/core@7.2.3)(@milkdown/ctx@7.2.3)(@milkdown/prose@7.2.3)(@milkdown/transformer@7.2.3)(vue@3.3.4)
+  '@pdanpdan/vue-keyboard-trap':
+    specifier: ^1.0.17
+    version: 1.0.17(vue@3.3.4)
+  '@prosemirror-adapter/vue':
+    specifier: ^0.2.5
+    version: 0.2.5(vue@3.3.4)
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
@@ -868,6 +877,15 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.15.0
 
+  /@pdanpdan/vue-keyboard-trap@1.0.17(vue@3.3.4):
+    resolution: {integrity: sha512-B2iQUSDTeiII/Vr+1muQtXWQT6efYFJrSolwxXCzghBMXmQb73xRxX9jDXv+yMUAPv8v5ylyc0WBHURmXFtTtw==}
+    engines: {node: '>= 12.22.0 || >= 14.19.0 || >= 16.14.0', yarn: '>= 1.22.0'}
+    peerDependencies:
+      vue: ^3.0.0 || ^2.0.0
+    dependencies:
+      vue: 3.3.4
+    dev: false
+
   /@playwright/test@1.35.0:
     resolution: {integrity: sha512-6qXdd5edCBynOwsz1YcNfgX8tNWeuS9fxy5o59D0rvHXxRtjXRebB4gE4vFVfEMXl/z8zTnAzfOs7aQDEs8G4Q==}
     engines: {node: '>=16'}
@@ -878,6 +896,23 @@ packages:
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
+
+  /@prosemirror-adapter/core@0.2.5:
+    resolution: {integrity: sha512-oeSamDlVr4WMhRlWW6BQp6sekcYa5yvndzwGXTg6Me1e0KMPMAdwOIoTyChqhj4HCTy3SZKu1cSSaYAY9eptKQ==}
+    dependencies:
+      tslib: 2.5.3
+    dev: false
+
+  /@prosemirror-adapter/vue@0.2.5(vue@3.3.4):
+    resolution: {integrity: sha512-dPBmUCATd9U0rk4iAssseZK98ewMOOdMiApPJl3aiVfdn4eVp8n6KrNAOF082oB09ZoqMFWy8EMtLvOp7uwG1w==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@prosemirror-adapter/core': 0.2.5
+      nanoid: 4.0.2
+      tslib: 2.5.3
+      vue: 3.3.4
+    dev: false
 
   /@rushstack/eslint-patch@1.3.1:
     resolution: {integrity: sha512-RkmuBcqiNioeeBKbgzMlOdreUkJfYaSjwgx9XDgGGpjvWgyaxWvDmZVSN9CS6LjEASadhgPv2BcFp+SeouWXXA==}

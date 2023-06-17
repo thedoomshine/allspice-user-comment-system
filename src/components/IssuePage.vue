@@ -17,8 +17,8 @@
     </div>
     <div class="issue-feed">
       <comment-block
-        v-for="{ attachment, user, posted_at, role, markdown } in userData"
-        :key="posted_at"
+        v-for="{ id, attachment, user, posted_at, role, markdown } in userData"
+        :key="id"
         :user="user"
         :attachment="attachment"
       >
@@ -30,22 +30,28 @@
               >{{ user.display_name }}</a
             >
             commented
-            <span class="time-distance">{{ formatDistanceToNow(new Date(posted_at!)) }} ago</span>
+            <span class="time-distance">{{ formatDistanceToNow(new Date(posted_at)) }} ago</span>
           </p>
-          <div class="role-label">{{ role! }}</div>
+          <div class="role-label">{{ role }}</div>
         </template>
+
         <template #content>
           <markdown-viewer :markdown="markdown" />
         </template>
       </comment-block>
 
       <markdown-editor
+        :id="uuid"
         :user="currentUser"
         :markdown="`# yeag 🐰 🖤
 
 ![allspice](https://images.ctfassets.net/3s5io6mnxfqz/mRfZFyrCxr37N7kmOP9ws/0ceaa2bbaa53712a8107a33cbe6a2cbc/AdobeStock_193176677.jpeg?w=828)
 
 **goth** *bitch* ***on patrol***
+
+[link](https://allspice.io)
+
+***
 
 ## level 2
 
@@ -55,31 +61,8 @@
 >
 michael scott
 
-### level 3
-
 > blockquote
 >> blockquote blockquote
-
-#### level 4
-
-1. ordered list item
-    1. ordered sub list item
-2. ordered list item
-3. ordered list item
-
-##### level 5
-
-- unordered list item
-    - unordered sub list item
-- unordered list item
-- unordered list item
-
-***
-
-###### level 6
-
-[link](https://github.com/thedoomshine)
-
 `"
       />
     </div>
@@ -96,6 +79,10 @@ import MarkdownEditor from '~/components/MarkdownEditor.vue'
 import MarkdownViewer from '~/components/MarkdownViewer.vue'
 import userData from '~/data/comments'
 import { currentUser } from '~/data/users'
+
+const uuid = Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) =>
+  ('0' + (byte & 0xff).toString(16)).slice(-2)
+).join('')
 </script>
 
 <style lang="scss">

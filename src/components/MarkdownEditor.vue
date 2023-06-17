@@ -3,8 +3,15 @@
     class="editor-wrapper"
     :user="user"
   >
+    <template #header>
+      <markdown-toolbar
+        :call="call"
+        :aria-controls="`markdown-editor-${id}`"
+      />
+    </template>
     <template #content>
       <markdown-viewer
+        :id="`markdown-editor-${id}`"
         class="markdown-editor"
         :markdown="markdown"
         editable
@@ -18,12 +25,19 @@
 </template>
 
 <script setup lang="ts">
+import type { CmdKey } from '@milkdown/core'
+import { callCommand } from '@milkdown/utils'
+
 import CommentBlock from '~/components/CommentBlock.vue'
+import MarkdownToolbar from '~/components/MarkdownToolbar.vue'
 import MarkdownViewer from '~/components/MarkdownViewer.vue'
 import type { UserProps } from '~/types/index'
 
-withDefaults(
+import { useMilkdown } from './MarkdownViewer.vue'
+
+const props = withDefaults(
   defineProps<{
+    id: string
     user: UserProps
     markdown?: string
   }>(),
@@ -31,6 +45,12 @@ withDefaults(
     markdown: '',
   }
 )
+
+const { get } = useMilkdown(props.markdown, true)
+
+function call<T>(command: CmdKey<T>, payload?: T) {
+  return get()?.action(callCommand(command, payload))
+}
 </script>
 
 <style lang="scss">

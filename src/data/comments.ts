@@ -1,15 +1,12 @@
 /* eslint-disable no-useless-escape */
 import type { CommentProps } from '~/types'
 
+import { users } from './users'
+
 const userData: CommentProps[] = [
   {
-    user: {
-      profile_image: 'https://hub.allspice.io/avatars/d7798257f63530c5d2bb466596137af1?size=84',
-      display_name: 'kyle',
-      first_name: 'kyle',
-      last_name: 'dumont',
-      profile_url: '',
-    },
+    user: { ...users.kyle },
+    id: '9081237418092374',
     posted_at: 'Thu, 11 Mar 2021 17:38:19 UTC',
     role: 'Owner',
     attachment: {
@@ -48,7 +45,7 @@ Atmel [SAM3X](https://ww1.microchip.com/downloads/en/DeviceDoc/Atmel-11057-32-bi
 [](#simulation-results)Simulation Results
 -----------------------------------------
 
-The following simulation shows the circuit response to 4K discharge with no ESD protection.  
+The following simulation shows the circuit response to 4K discharge with no ESD protection.
 [![Endstop Circuit](https://hub.allspice.io/attachments/37b73d49-9763-430c-8ef2-8d7146fbcf4c "Endstop Circuit")](https://hub.allspice.io/attachments/37b73d49-9763-430c-8ef2-8d7146fbcf4c "Endstop Circuit")
 
 [![ESD Base](https://raw.githubusercontent.com/AllSpiceIO/Archimajor/7ce1854e2ecebede7c92cea9e21a71155f8da14a/Simulation/ESD/Endstops_ESD.svg "ESD Endstop Base Condition")](https://raw.githubusercontent.com/AllSpiceIO/Archimajor/7ce1854e2ecebede7c92cea9e21a71155f8da14a/Simulation/ESD/Endstops_ESD.svg "ESD Endstop Base Condition")  
@@ -56,6 +53,97 @@ The input stimulus shown at 4KV
 
 [![ESD Base](https://raw.githubusercontent.com/AllSpiceIO/Archimajor/7ce1854e2ecebede7c92cea9e21a71155f8da14a/Simulation/ESD/Endstops_ESD_SAM3X.svg "ESD Endstop Base Condition @ SAM3X")](https://raw.githubusercontent.com/AllSpiceIO/Archimajor/7ce1854e2ecebede7c92cea9e21a71155f8da14a/Simulation/ESD/Endstops_ESD_SAM3X.svg "ESD Endstop Base Condition @ SAM3X")
 VDDIO reaching 65V at the SAM3X chip clearly exceeds voltage specification of 4.0V`,
+  },
+  {
+    user: { ...users.morgan },
+    id: '5461723541872465',
+    posted_at: 'Fri, 16 Jun 2023 19:15:41 GMT',
+    role: 'Contributor',
+    markdown: `# Heading 1
+## Heading 2
+### Heading 3
+#### Heading 4
+##### Heading 5
+
+Normal paragraph text.
+
+* List
+* List
+* List
+
+1. List
+1. List
+1. List
+
+\`Inline code\`
+
+\`\`\`
+<!-- Code block -->
+<h1>Sample heading</h1>
+\`\`\`
+
+*Italic text 1*
+
+**Bold text 1**
+
+> Blockquote text.
+
+[Link](http://example.com)
+
+Horizontal Rule
+
+---
+
+~~Strikethrough~~
+
+\`\`\`javascript
+function doSomething() {
+  // Write code here
+}
+\`\`\`
+
+* [ ] incomplete task
+* [x] completed task
+
+1. [ ] incomplete task
+2. [x] completed task
+
+First Header | Second Header
+------------ | -------------
+cell 1       | cell 2
+cell 3       | cell 4
+
+Heading 1
+===
+Heading 2
+---
+
+- List
+  - Sub List
+    - Sub Sub List
+- List
+- List
+
+1. List
+   1. Sub List
+   2. Sub List
+2. List
+3. List
+
+_Italic text 2_
+
+__Bold text 2__
+
+    // A sample code block
+    console.log("Sample code block");
+
+[Link][1]
+
+Horizontal Rule
+
+***
+
+[1]:http://example.com`,
   },
 ]
 
