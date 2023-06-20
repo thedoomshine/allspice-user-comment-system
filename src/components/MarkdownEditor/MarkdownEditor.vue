@@ -29,11 +29,10 @@ import type { CmdKey } from '@milkdown/core'
 import { callCommand } from '@milkdown/utils'
 
 import CommentBlock from '~/components/CommentBlock.vue'
-import MarkdownToolbar from '~/components/MarkdownToolbar.vue'
-import MarkdownViewer from '~/components/MarkdownViewer.vue'
+import MarkdownToolbar from '~/components/MarkdownEditor/MarkdownToolbar.vue'
+import MarkdownViewer from '~/components/MarkdownEditor/MarkdownViewer.vue'
 import type { UserProps } from '~/types/index'
-
-import { useMilkdown } from './MarkdownViewer.vue'
+import { useMilkdown } from '~/utils/useMilkdown'
 
 const props = withDefaults(
   defineProps<{

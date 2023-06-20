@@ -36,14 +36,20 @@
         </template>
 
         <template #content>
-          <markdown-viewer :markdown="markdown" />
+          <milkdown-provider>
+            <prosemirror-adapter-provider>
+              <markdown-viewer :markdown="markdown" />
+            </prosemirror-adapter-provider>
+          </milkdown-provider>
         </template>
       </comment-block>
 
-      <markdown-editor
-        :id="uuid"
-        :user="currentUser"
-        :markdown="`# yeag 🐰 🖤
+      <milkdown-provider>
+        <prosemirror-adapter-provider>
+          <markdown-editor
+            :id="uuid"
+            :user="currentUser"
+            :markdown="`# yeag 🐰 🖤
 
 ![allspice](https://images.ctfassets.net/3s5io6mnxfqz/mRfZFyrCxr37N7kmOP9ws/0ceaa2bbaa53712a8107a33cbe6a2cbc/AdobeStock_193176677.jpeg?w=828)
 
@@ -64,19 +70,23 @@ michael scott
 > blockquote
 >> blockquote blockquote
 `"
-      />
+          />
+        </prosemirror-adapter-provider>
+      </milkdown-provider>
     </div>
     <issue-meta class="issue-meta" />
   </main>
 </template>
 
 <script setup lang="ts">
+import { MilkdownProvider } from '@milkdown/vue'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { formatDistanceToNow } from 'date-fns'
 
 import CommentBlock from '~/components/CommentBlock.vue'
 import IssueMeta from '~/components/IssueMeta.vue'
-import MarkdownEditor from '~/components/MarkdownEditor.vue'
-import MarkdownViewer from '~/components/MarkdownViewer.vue'
+import MarkdownEditor from '~/components/MarkdownEditor/MarkdownEditor.vue'
+import MarkdownViewer from '~/components/MarkdownEditor/MarkdownViewer.vue'
 import userData from '~/data/comments'
 import { currentUser } from '~/data/users'
 

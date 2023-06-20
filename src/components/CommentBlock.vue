@@ -1,46 +1,40 @@
 <template>
   <div class="comment-block">
-    <milkdown-provider>
-      <prosemirror-adapter-provider>
-        <a :href="user.profile_url">
-          <img
-            class="avatar"
-            :src="user.profile_image"
-            :alt="`${user.first_name} ${user.last_name}`"
-          />
-        </a>
-        <div class="comment">
-          <header class="comment-header">
-            <slot name="header" />
-          </header>
-          <div class="comment-content">
-            <slot
-              name="content"
-              :markdown="markdown"
-            />
+    <a :href="user.profile_url">
+      <img
+        class="avatar"
+        :src="user.profile_image"
+        :alt="`${user.first_name} ${user.last_name}`"
+      />
+    </a>
+    <div class="comment">
+      <header class="comment-header">
+        <slot name="header" />
+      </header>
+      <div class="comment-content">
+        <slot
+          name="content"
+          :markdown="markdown"
+        />
 
-            <div
-              v-if="attachment?.url"
-              class="dropzone-attachments"
-            >
-              <a
-                :href="attachment.url"
-                class="attachment-url"
-                ><file-icon class="icon" />{{ attachment.title }}</a
-              >
-              <span class="attachment-size">{{ attachment.size }}</span>
-            </div>
-          </div>
-          <slot />
+        <div
+          v-if="attachment?.url"
+          class="dropzone-attachments"
+        >
+          <a
+            :href="attachment.url"
+            class="attachment-url"
+            ><file-icon class="icon" />{{ attachment.title }}</a
+          >
+          <span class="attachment-size">{{ attachment.size }}</span>
         </div>
-      </prosemirror-adapter-provider>
-    </milkdown-provider>
+      </div>
+      <slot />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { MilkdownProvider } from '@milkdown/vue'
-import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { defineComponent } from 'vue'
 import type { UserProps } from '~/types'
 import FileIcon from '~/components/icons/file.svg'
@@ -142,9 +136,12 @@ export default defineComponent({
 
 .attachment-url {
   display: inline-flex;
+  align-items: flex-end;
   gap: 0.5rem;
 }
 .icon {
   fill: currentcolor;
+  height: 1.25rem;
+  aspect-ratio: 1;
 }
 </styles>

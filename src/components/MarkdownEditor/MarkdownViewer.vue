@@ -2,62 +2,23 @@
   <milkdown />
 </template>
 
-<script lang="ts">
-import { Editor, defaultValueCtx, editorViewOptionsCtx, rootCtx } from '@milkdown/core'
-import { clipboard } from '@milkdown/plugin-clipboard'
-import { cursor } from '@milkdown/plugin-cursor'
-import { history } from '@milkdown/plugin-history'
-import { upload } from '@milkdown/plugin-upload'
-import { commonmark, listItemSchema } from '@milkdown/preset-commonmark'
-import { gfm } from '@milkdown/preset-gfm'
-import { $view } from '@milkdown/utils'
-import { Milkdown, useEditor } from '@milkdown/vue'
-import { useNodeViewFactory } from '@prosemirror-adapter/vue'
+<script setup lang="ts">
+import { Milkdown } from '@milkdown/vue'
 
-import MarkdownListItem from './MarkdownListItem.vue'
+import { useMilkdown } from '~/utils/useMilkdown'
 
-const nodeViewFactory = useNodeViewFactory()
+const props = withDefaults(
+  defineProps<{
+    markdown?: string
+    editable?: boolean
+  }>(),
+  {
+    markdown: '',
+    editable: false,
+  }
+)
 
-export const useMilkdown = (markdown: string, editable: boolean) => {
-  const editor = useEditor((root) =>
-    Editor.make()
-      .config((ctx) => {
-        ctx.set(rootCtx, root)
-        ctx.set(defaultValueCtx, markdown)
-        ctx.set(editorViewOptionsCtx, { editable: () => editable })
-      })
-      .use(commonmark)
-      .use(gfm)
-      .use(
-        $view(listItemSchema.node, () => nodeViewFactory({ component: MarkdownListItem, as: 'li' }))
-      )
-      .use(clipboard)
-      .use(cursor)
-      .use(history)
-      .use(upload)
-  )
-
-  return editor
-}
-
-export default {
-  props: {
-    markdown: {
-      type: String,
-      default: '',
-    },
-    editable: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  components: {
-    Milkdown,
-  },
-  created() {
-    useMilkdown(this.markdown, this.editable)
-  },
-}
+useMilkdown(props.markdown, props.editable)
 </script>
 
 <styles lang="scss" scoped>
