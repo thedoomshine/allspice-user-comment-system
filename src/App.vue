@@ -48,17 +48,16 @@ import IssuePage from '~/components/IssuePage.vue'
 
 <style lang="scss">
 :root {
-  --grid-gutter: minmax(0.25rem, calc(25vw - 16rem));
+  --grid-gutter: calc(25vw - 16rem);
   --border-radius: 0.35rem;
 }
 .app-header {
   display: grid;
   grid-template-columns: var(--grid-gutter) max-content auto var(--grid-gutter);
-  column-gap: 2rem;
   align-items: center;
 
   width: 100%;
-  padding: 0.25rem 0;
+  padding: 0.25rem 2rem;
 
   line-height: 1.5;
 

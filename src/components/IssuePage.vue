@@ -36,34 +36,14 @@
         </template>
 
         <template #content>
-          <markdown-viewer :markdown="markdown" />
+          <editor-content :modelValue="markdown" />
         </template>
       </comment-block>
 
       <markdown-editor
-        :id="uuid"
+        id="new-post-editor"
         :user="currentUser"
-        :markdown="`# yeag 🐰 🖤
-
-![allspice](https://images.ctfassets.net/3s5io6mnxfqz/mRfZFyrCxr37N7kmOP9ws/0ceaa2bbaa53712a8107a33cbe6a2cbc/AdobeStock_193176677.jpeg?w=828)
-
-**goth** *bitch* ***on patrol***
-
-[link](https://allspice.io)
-
-***
-
-## level 2
-
->> you miss 100% of the shots you never take
->
-> wayne gretzky
->
-michael scott
-
-> blockquote
->> blockquote blockquote
-`"
+        :modelValue="''"
       />
     </div>
     <issue-meta class="issue-meta" />
@@ -75,14 +55,10 @@ import { formatDistanceToNow } from 'date-fns'
 
 import CommentBlock from '~/components/CommentBlock.vue'
 import IssueMeta from '~/components/IssueMeta.vue'
-import MarkdownEditor from '~/components/MarkdownEditor.vue'
-import MarkdownViewer from '~/components/MarkdownViewer.vue'
+import EditorContent from '~/components/MarkdownEditor/EditorContent.vue'
+import MarkdownEditor from '~/components/MarkdownEditor/MarkdownEditor.vue'
 import userData from '~/data/comments'
 import { currentUser } from '~/data/users'
-
-const uuid = Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) =>
-  ('0' + (byte & 0xff).toString(16)).slice(-2)
-).join('')
 </script>
 
 <style lang="scss">

@@ -1,5 +1,5 @@
 <template>
-  <header
+  <div
     role="toolbar"
     aria-label="Text formatting"
     class="markdown-editor__toolbar"
@@ -20,7 +20,8 @@
         :is="button.icon"
       />
     </button>
-  </header>
+    <slot />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -34,6 +35,7 @@ import {
   wrapInOrderedListCommand,
 } from '@milkdown/preset-commonmark'
 import { toggleStrikethroughCommand } from '@milkdown/preset-gfm'
+import { callCommand } from '@milkdown/utils'
 import { VueKeyboardTrapDirectiveFactory } from '@pdanpdan/vue-keyboard-trap'
 
 import IconBold from '~/components/icons/bold.svg'
@@ -46,56 +48,69 @@ import IconListUL from '~/components/icons/list-ul.svg'
 import IconQuote from '~/components/icons/quote.svg'
 import IconStrike from '~/components/icons/strike.svg'
 
+
 const vKbdTrap = VueKeyboardTrapDirectiveFactory().directive
 
-const props = defineProps<{ call: <T>(command: CmdKey<T>, payload?: T) => boolean }>()
+const props = withDefaults(
+  defineProps<{
+    usePlainText?: boolean
+  }>(),
+  {
+    usePlainText: false,
+  }
+)
+
+
+// function call<T>(command: CmdKey<T>, payload?: T) {
+//   return get()?.action(callCommand(command, payload))
+// }
 
 const controlButtons = [
-  {
-    name: 'Heading',
-    icon: IconHeading,
-    onClick: () => props.call(wrapInHeadingCommand.key),
-  },
-  {
-    name: 'Bold',
-    icon: IconBold,
-    onClick: () => props.call(toggleStrongCommand.key),
-  },
-  {
-    name: 'Italic',
-    icon: IconItalic,
-    onClick: () => props.call(toggleEmphasisCommand.key),
-  },
-  {
-    name: 'Strikethrough',
-    icon: IconStrike,
-    onClick: () => props.call(toggleStrikethroughCommand.key),
-  },
-  {
-    name: 'Quote',
-    icon: IconQuote,
-    onClick: () => props.call(wrapInBlockquoteCommand.key),
-  },
-  {
-    name: 'Link',
-    icon: IconLink,
-    // onClick: () => props.call(),
-  },
-  {
-    name: 'Unordered List',
-    icon: IconListUL,
-    onClick: () => props.call(wrapInBulletListCommand.key),
-  },
-  {
-    name: 'Ordered List',
-    icon: IconListOL,
-    onClick: () => props.call(wrapInOrderedListCommand.key),
-  },
-  {
-    name: 'Task List',
-    icon: IconListTask,
-    // onClick: () => props.call(wrapInTaskListCommand.key),
-  },
+  // {
+  //   name: 'Heading',
+  //   icon: IconHeading,
+  //   onClick: () => call(wrapInHeadingCommand.key),
+  // },
+  // {
+  //   name: 'Bold',
+  //   icon: IconBold,
+  //   onClick: () => call(toggleStrongCommand.key),
+  // },
+  // {
+  //   name: 'Italic',
+  //   icon: IconItalic,
+  //   onClick: () => call(toggleEmphasisCommand.key),
+  // },
+  // {
+  //   name: 'Strikethrough',
+  //   icon: IconStrike,
+  //   onClick: () => call(toggleStrikethroughCommand.key),
+  // },
+  // {
+  //   name: 'Quote',
+  //   icon: IconQuote,
+  //   onClick: () => call(wrapInBlockquoteCommand.key),
+  // },
+  // {
+  //   name: 'Link',
+  //   icon: IconLink,
+  //   // onClick: () => call(),
+  // },
+  // {
+  //   name: 'Unordered List',
+  //   icon: IconListUL,
+  //   onClick: () => call(wrapInBulletListCommand.key),
+  // },
+  // {
+  //   name: 'Ordered List',
+  //   icon: IconListOL,
+  //   onClick: () => call(wrapInOrderedListCommand.key),
+  // },
+  // {
+  //   name: 'Task List',
+  //   icon: IconListTask,
+  //   // onClick: () => call(wrapInTaskListCommand.key),
+  // },
 ]
 </script>
 
@@ -103,6 +118,7 @@ const controlButtons = [
 .markdown-editor__toolbar {
   display: flex;
   gap: 0.5rem;
+  align-items: center;
 }
 
 .format-button {
