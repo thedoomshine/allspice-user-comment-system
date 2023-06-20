@@ -23,14 +23,6 @@ useMilkdown(props.markdown, props.editable)
 
 <styles lang="scss" scoped>
 .milkdown {
-  display: flex;
-  flex-direction: column;
-  white-space: pre-wrap;
-  position: relative;
-  word-wrap: break-word;
-  line-height: 1.5;
-  max-width: 100%;
-
   .editor > :first-child {
     margin-top: 0;
   }
@@ -81,8 +73,11 @@ useMilkdown(props.markdown, props.editable)
   table,
   pre,
   details {
+    display: block;
     margin-top: 0;
     margin-bottom: 1rem;
+    max-width: 80ch;
+    overflow-wrap: anywhere;
   }
 
   ul ul,
@@ -125,6 +120,11 @@ useMilkdown(props.markdown, props.editable)
     p {
       margin: 0;
     }
+  }
+
+  ul[data-type="taskList"] li {
+    display: inline-flex;
+    align-items: center;
   }
 
   strong {
@@ -201,10 +201,12 @@ useMilkdown(props.markdown, props.editable)
   }
 
   table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 0;
+    overflow: hidden;
     display: block;
     width: 100%;
-    width: max-content;
-    max-width: 100%;
     overflow: auto;
     p {
       margin: 0;
@@ -219,6 +221,7 @@ useMilkdown(props.markdown, props.editable)
     td {
       padding: 0.5rem 1rem;
       border: 1px solid var(--color-secondary);
+      position: relative;
     }
 
     tr {

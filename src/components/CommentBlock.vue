@@ -125,6 +125,8 @@ export default defineComponent({
 .comment-content {
   background-color: var(--color-box-body);
   padding: 1rem;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
 }
 
 .dropzone-attachments {
@@ -135,13 +137,13 @@ export default defineComponent({
 }
 
 .attachment-url {
-  display: inline-flex;
   align-items: flex-end;
+  display: inline-flex;
   gap: 0.5rem;
 }
 .icon {
   fill: currentcolor;
-  height: 1.25rem;
   aspect-ratio: 1;
+  height: 1.25em;
 }
 </styles>

@@ -6,9 +6,9 @@
       class="checkbox"
       type="checkbox"
     />
-    <div :ref="contentRef" />
+    <span :ref="contentRef" />
   </label>
-  <div
+  <span
     v-else
     :ref="contentRef"
   />
@@ -20,6 +20,15 @@ import { useNodeViewContext } from '@prosemirror-adapter/vue'
 const { contentRef, node, setAttrs } = useNodeViewContext()
 const attrs = node.value.attrs
 const checked = attrs.checked
+
+// const props = withDefaults(
+//   defineProps<{
+//     disabled?: boolean
+//   }>(),
+//   {
+//     disabled: true,
+//   }
+// )
 
 const handleOnChange = () => {
   setAttrs({

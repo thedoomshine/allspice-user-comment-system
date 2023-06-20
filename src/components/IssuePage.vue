@@ -57,6 +57,8 @@
 
 [link](https://allspice.io)
 
+- [x] completed
+
 ***
 
 ## level 2

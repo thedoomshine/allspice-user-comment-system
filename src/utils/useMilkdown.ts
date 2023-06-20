@@ -1,6 +1,6 @@
 import { Editor, defaultValueCtx, editorViewOptionsCtx, rootCtx } from '@milkdown/core'
 import { clipboard } from '@milkdown/plugin-clipboard'
-import { cursor } from '@milkdown/plugin-cursor'
+import { cursor, dropCursorConfig } from '@milkdown/plugin-cursor'
 import { history } from '@milkdown/plugin-history'
 import { upload } from '@milkdown/plugin-upload'
 import { commonmark, listItemSchema } from '@milkdown/preset-commonmark'
@@ -19,6 +19,7 @@ export const useMilkdown = (markdown: string, editable: boolean) => {
         ctx.set(rootCtx, root)
         ctx.set(defaultValueCtx, markdown)
         ctx.set(editorViewOptionsCtx, { editable: () => editable })
+        ctx.set(dropCursorConfig.key, { color: 'var(--color-text)' })
       })
       .use(commonmark)
       .use(gfm)
@@ -27,7 +28,13 @@ export const useMilkdown = (markdown: string, editable: boolean) => {
       .use(history)
       .use(upload)
       .use(
-        $view(listItemSchema.node, () => nodeViewFactory({ component: MarkdownListItem, as: 'li' }))
+        $view(listItemSchema.node, () =>
+          nodeViewFactory({
+            component: MarkdownListItem,
+            as: 'li',
+            contentAs: 'label',
+          })
+        )
       )
   )
 
