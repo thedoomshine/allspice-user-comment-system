@@ -18,16 +18,16 @@ const userData: CommentProps[] = [
     markdown: `*Disclaimer: The following data is fictional and does not represent real-world performance of the Archimajor Rambo Board*
 
 ## Summary
-!thumbnail[Endstops](EndStops.SchDoc){ commit="9f594c695a488ea6b576d21e42408135cf2fb548" view-coords="9,62,40,103" href="https://hub.allspice.io/AllSpice/Archimajor/src/commit/9f594c695a488ea6b576d21e42408135cf2fb548/EndStops.SchDoc" aspect-ratio="1.501"}
+::thumbnail[Endstops.SchDoc]{ commit="9f594c695a488ea6b576d21e42408135cf2fb548" view-coords="9,62,40,103" href="https://hub.allspice.io/AllSpice/Archimajor/src/commit/9f594c695a488ea6b576d21e42408135cf2fb548/EndStops.SchDoc" aspect-ratio="1.501"}
 
 v0.4 of the Alpha main board fails required spec: 4KV contact discharge at endstop inputs.
 
 Failure Mode(s): 10/10 cases SAM3X processor enters reset condition. 2/10 cases, memory is corrupted.
-
-
-
-
-[Left] Relevant Schematic
+\\
+\\
+\\
+\\
+[Left] Relevant Thumbnail
 
 ## Test setup
 TBD

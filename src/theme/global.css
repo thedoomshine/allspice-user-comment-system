@@ -41,7 +41,7 @@ body {
 a {
   cursor: pointer;
   color: var(--color-primary);
-  text-decoration-skip-ink: all;
+  text-decoration-skip-ink: auto;
   &:hover {
     text-decoration: underline;
   }

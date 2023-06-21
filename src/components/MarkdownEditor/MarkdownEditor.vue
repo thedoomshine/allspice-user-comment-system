@@ -55,8 +55,8 @@ import { ref } from 'vue'
 import CommentBlock from '~/components/CommentBlock.vue'
 import MarkdownToolbar from '~/components/MarkdownEditor/MarkdownToolbar.vue'
 import MarkdownViewer from '~/components/MarkdownEditor/MarkdownViewer.vue'
+import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
 import type { UserProps } from '~/types/index'
-import { useMilkdown } from '~/utils/useMilkdown'
 
 const showPlainText = ref(false)
 
@@ -176,6 +176,18 @@ function call<T>(command: CmdKey<T>, payload?: T) {
 
   &.checked {
     transform: translateX(1.25rem);
+  }
+}
+
+.thumbnail-wrapper {
+  float: left;
+  overflow: hidden;
+  height: 220.283px;
+  width: 250px;
+  margin-right: 1rem;
+
+  img {
+    width: 100%;
   }
 }
 </style>

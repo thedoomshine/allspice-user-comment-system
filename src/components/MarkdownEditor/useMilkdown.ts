@@ -10,6 +10,7 @@ import { useEditor } from '@milkdown/vue'
 import { useNodeViewFactory } from '@prosemirror-adapter/vue'
 
 import MarkdownListItem from '~/components/MarkdownEditor/MarkdownListItem.vue'
+import thumbnail from '~/components/MarkdownEditor/thumbnail.ts'
 
 export const useMilkdown = (markdown: string, editable: boolean) => {
   const nodeViewFactory = useNodeViewFactory()
@@ -27,6 +28,7 @@ export const useMilkdown = (markdown: string, editable: boolean) => {
       .use(cursor)
       .use(history)
       .use(upload)
+      .use(thumbnail)
       .use(
         $view(listItemSchema.node, () =>
           nodeViewFactory({

@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import { Milkdown } from '@milkdown/vue'
 
-import { useMilkdown } from '~/utils/useMilkdown'
+import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
 
 const props = withDefaults(
   defineProps<{
@@ -37,6 +37,7 @@ useMilkdown(props.markdown, props.editable)
     margin-bottom: 1rem;
     margin-top: 1.5rem;
     line-height: 1.15;
+    clear: both;
   }
 
   h1,
@@ -159,6 +160,11 @@ useMilkdown(props.markdown, props.editable)
   code {
     font-family: var(--font-family-monospace);
     font-size: inherit;
+  }
+
+  p + img,
+  img + p {
+    margin-top: 1rem;
   }
 
   /* Code in text */
