@@ -42,9 +42,9 @@ import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
 import IconBold from '~/components/icons/bold.svg'
 import IconHeading from '~/components/icons/heading.svg'
 import IconItalic from '~/components/icons/italic.svg'
-import IconLink from '~/components/icons/link.svg'
+// import IconLink from '~/components/icons/link.svg'
 import IconListOL from '~/components/icons/list-ol.svg'
-import IconListTask from '~/components/icons/list-task.svg'
+// import IconListTask from '~/components/icons/list-task.svg'
 import IconListUL from '~/components/icons/list-ul.svg'
 import IconQuote from '~/components/icons/quote.svg'
 import IconStrike from '~/components/icons/strike.svg'
@@ -93,11 +93,11 @@ const controlButtons = [
     icon: IconQuote,
     onClick: () => call(wrapInBlockquoteCommand.key),
   },
-  {
-    name: 'Link',
-    icon: IconLink,
-    // onClick: () => call(),
-  },
+  // {
+  //   name: 'Link',
+  //   icon: IconLink,
+  //   onClick: () => call(),
+  // },
   {
     name: 'Unordered List',
     icon: IconListUL,
@@ -108,11 +108,11 @@ const controlButtons = [
     icon: IconListOL,
     onClick: () => call(wrapInOrderedListCommand.key),
   },
-  {
-    name: 'Task List',
-    icon: IconListTask,
-    // onClick: () => call(wrapInTaskListCommand.key),
-  },
+  // {
+  //   name: 'Task List',
+  //   icon: IconListTask,
+  //   onClick: () => call(wrapInTaskListCommand.key),
+  // },
 ]
 </script>
 
