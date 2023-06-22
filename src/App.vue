@@ -79,7 +79,7 @@ const vKbdTrap = VueKeyboardTrapDirectiveFactory().directive
 }
 
 .nav-bar {
-  display: flex;
+  display: none;
   flex: 1 1 auto;
   gap: 0.35rem;
   align-items: center;
@@ -104,5 +104,11 @@ const vKbdTrap = VueKeyboardTrapDirectiveFactory().directive
   &__left + &__right {
     margin-left: auto;
   }
+}
+
+@media only screen and (min-width: 1280px) {
+  .nav-bar {
+		display: flex;
+	}
 }
 </style>
