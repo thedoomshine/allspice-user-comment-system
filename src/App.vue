@@ -53,9 +53,16 @@ const vKbdTrap = VueKeyboardTrapDirectiveFactory().directive
 
 <style lang="scss">
 :root {
-  --grid-gutter: calc(25vw - 16rem);
+  --grid-gutter: 0.5rem;
   --border-radius: 0.35rem;
 }
+
+@media screen only and (min-width: 1280px) {
+	:root {
+	  --grid-gutter: calc(25vw - 16rem);
+	}
+}
+
 .app-header {
   display: grid;
   grid-template-columns: var(--grid-gutter) max-content auto var(--grid-gutter);
