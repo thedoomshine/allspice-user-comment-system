@@ -44,6 +44,7 @@
 </template>
 
 <script setup lang="ts">
+// @ts-ignore
 import { VueKeyboardTrapDirectiveFactory } from '@pdanpdan/vue-keyboard-trap'
 import IssuePage from '~/components/IssuePage.vue'
 

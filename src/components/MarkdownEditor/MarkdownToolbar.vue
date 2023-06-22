@@ -35,6 +35,7 @@ import {
 } from '@milkdown/preset-commonmark'
 import { toggleStrikethroughCommand } from '@milkdown/preset-gfm'
 import { callCommand } from '@milkdown/utils'
+// @ts-ignore
 import { VueKeyboardTrapDirectiveFactory } from '@pdanpdan/vue-keyboard-trap'
 
 import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
