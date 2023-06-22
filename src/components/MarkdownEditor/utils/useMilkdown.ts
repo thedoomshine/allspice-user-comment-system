@@ -10,8 +10,7 @@ import { gfm } from '@milkdown/preset-gfm';
 import { $view } from '@milkdown/utils';
 import { useEditor } from '@milkdown/vue';
 import { useNodeViewFactory } from '@prosemirror-adapter/vue'
-import { watch } from 'fs'
-import { watchEffect } from 'vue'
+import { watch, watchEffect } from 'vue'
 
 import MarkdownListItem from '~/components/MarkdownEditor/MarkdownListItem.vue'
 import thumbnail from '~/components/MarkdownEditor/marks/thumbnail'
@@ -64,7 +63,6 @@ export const useMilkdown = (
     editor.use(
       [
         (ctx: Ctx) => () => {
-          ctx.update(defaultValueCtx, () => markdown)
           ctx.update(editorViewOptionsCtx, (prev) => ({
             ...prev,
             editable: () => editable,
@@ -73,14 +71,32 @@ export const useMilkdown = (
       ].flat()
     )
 
-    await editor.destroy().then(async () => {
-      await editor.create()
-    })
+    editor.use(
+      [
+        (ctx: Ctx) => () => {
+          ctx.update(defaultValueCtx, () => markdown)
+        },
+      ].flat()
+    )
+
+    await editor.create()
   }
 
-  watchEffect(() => {
-    effect()
-  })
+  watch(
+    () => editable,
+    () => {
+      effect()
+    },
+    { immediate: true }
+  )
+
+  watch(
+    () => markdown,
+    () => {
+      effect
+    },
+    { immediate: true }
+  )
 
   return editorInfo
 }
