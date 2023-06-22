@@ -1,14 +1,17 @@
 import { Editor, defaultValueCtx, editorViewOptionsCtx, rootCtx } from '@milkdown/core'
-import { clipboard } from '@milkdown/plugin-clipboard'
-import { cursor, dropCursorConfig } from '@milkdown/plugin-cursor'
-import { history } from '@milkdown/plugin-history'
-import { listener, listenerCtx } from '@milkdown/plugin-listener'
-import { upload } from '@milkdown/plugin-upload'
-import { commonmark, listItemSchema } from '@milkdown/preset-commonmark'
-import { gfm } from '@milkdown/preset-gfm'
-import { $view } from '@milkdown/utils'
-import { useEditor } from '@milkdown/vue'
+import type { Ctx } from '@milkdown/ctx';
+import { clipboard } from '@milkdown/plugin-clipboard';
+import { cursor, dropCursorConfig } from '@milkdown/plugin-cursor';
+import { history } from '@milkdown/plugin-history';
+import { listener, listenerCtx } from '@milkdown/plugin-listener';
+import { upload } from '@milkdown/plugin-upload';
+import { commonmark, listItemSchema } from '@milkdown/preset-commonmark';
+import { gfm } from '@milkdown/preset-gfm';
+import { $view } from '@milkdown/utils';
+import { useEditor } from '@milkdown/vue';
 import { useNodeViewFactory } from '@prosemirror-adapter/vue'
+import { watch } from 'fs'
+import { watchEffect } from 'vue'
 
 import MarkdownListItem from '~/components/MarkdownEditor/MarkdownListItem.vue'
 import thumbnail from '~/components/MarkdownEditor/marks/thumbnail'
@@ -19,7 +22,7 @@ export const useMilkdown = (
   onChange?: (markdown: string) => void
 ) => {
   const nodeViewFactory = useNodeViewFactory()
-  const editor = useEditor((root) =>
+  const editorInfo = useEditor((root) =>
     Editor.make()
       .config((ctx) => {
         ctx.set(rootCtx, root)
@@ -51,5 +54,33 @@ export const useMilkdown = (
       )
   )
 
-  return editor
+  const effect = async () => {
+    const editor = editorInfo?.get()
+
+    if (!editor) {
+      return
+    }
+
+    editor.use(
+      [
+        (ctx: Ctx) => () => {
+          ctx.update(defaultValueCtx, () => markdown)
+          ctx.update(editorViewOptionsCtx, (prev) => ({
+            ...prev,
+            editable: () => editable,
+          }))
+        },
+      ].flat()
+    )
+
+    await editor.destroy().then(async () => {
+      await editor.create()
+    })
+  }
+
+  watchEffect(() => {
+    effect()
+  })
+
+  return editorInfo
 }

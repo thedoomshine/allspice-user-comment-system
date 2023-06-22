@@ -71,7 +71,7 @@ const controlButtons = [
   {
     name: 'Heading',
     icon: IconHeading,
-    onClick: () => call(wrapInHeadingCommand.key, 1),
+    onClick: () => call(wrapInHeadingCommand.key),
   },
   {
     name: 'Bold',
