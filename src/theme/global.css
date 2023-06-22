@@ -39,10 +39,29 @@ body {
 }
 
 a {
-  cursor: pointer;
   color: var(--color-primary);
   text-decoration-skip-ink: auto;
   &:hover {
     text-decoration: underline;
+  }
+}
+
+button {
+  display: flex;
+  align-items: center;
+
+  padding: 0.25rem;
+
+  border: solid 1px transparent;
+  border-radius: var(--border-radius);
+  &:focus-visible {
+    border-color: var(--color-primary);
+  }
+}
+
+input {
+  border: solid 1px transparent;
+  &:focus-visible {
+    border-color: var(--color-primary);
   }
 }

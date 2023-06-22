@@ -3,12 +3,11 @@ import type { CommentProps } from '~/types'
 
 import { users } from './users'
 
-const userData: CommentProps[] = [
+const commentsData: CommentProps[] = [
   {
     user: { ...users.kyle },
     id: '9081237418092374',
     posted_at: 'Thu, 11 Mar 2021 17:38:19 UTC',
-    role: 'Owner',
     attachment: {
       url: 'https://hub.allspice.io/attachments/37b73d49-9763-430c-8ef2-8d7146fbcf4c',
       title: 'Endstops_ESD.png',
@@ -49,7 +48,6 @@ VDDIO reaching 65V at the SAM3X chip clearly exceeds voltage specification of 4.
     user: { ...users.morgan },
     id: '5461723541872465',
     posted_at: 'Fri, 16 Jun 2023 19:15:41 GMT',
-    role: 'Contributor',
     markdown: `# Heading 1
 ## Heading 2
 ### Heading 3
@@ -142,4 +140,4 @@ Horizontal Rule
   },
 ]
 
-export default userData
+export default commentsData

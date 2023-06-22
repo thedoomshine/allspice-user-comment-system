@@ -1,40 +1,46 @@
 <template>
-  <div class="comment-block">
-    <a :href="user.profile_url">
-      <img
-        class="avatar"
-        :src="user.profile_image"
-        :alt="`${user.first_name} ${user.last_name}`"
-      />
-    </a>
-    <div class="comment">
-      <header class="comment-header">
-        <slot name="header" />
-      </header>
-      <div class="comment-content">
-        <slot
-          name="content"
-          :markdown="markdown"
-        />
+  <milkdown-provider>
+    <prosemirror-adapter-provider>
+      <div class="comment-block" :class="class" :ariaRole="ariaRole">
+        <a class="avatar-link" :href="user.profile_url">
+          <img
+            class="avatar"
+            :src="user.profile_image"
+            :alt="`${user.first_name} ${user.last_name}`"
+          />
+        </a>
+        <div class="comment">
+          <header class="comment-header">
+            <slot name="header" />
+          </header>
+          <div class="comment-content">
+            <slot
+              name="content"
+              :markdown="markdown"
+            />
 
-        <div
-          v-if="attachment?.url"
-          class="dropzone-attachments"
-        >
-          <a
-            :href="attachment.url"
-            class="attachment-url"
-            ><file-icon class="icon" />{{ attachment.title }}</a
-          >
-          <span class="attachment-size">{{ attachment.size }}</span>
+            <div
+              v-if="attachment?.url"
+              class="dropzone-attachments"
+            >
+              <a
+                :href="attachment.url"
+                class="attachment-url"
+                ><file-icon class="icon" />{{ attachment.title }}</a
+              >
+              <span class="attachment-size">{{ attachment.size }}</span>
+            </div>
+          </div>
+          <slot />
         </div>
       </div>
-      <slot />
-    </div>
-  </div>
+    </prosemirror-adapter-provider>
+  </milkdown-provider>
 </template>
 
 <script setup lang="ts">
+import { MilkdownProvider } from '@milkdown/vue'
+import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
 import { defineComponent } from 'vue'
 import type { UserProps } from '~/types'
 import FileIcon from '~/components/icons/file.svg'
@@ -47,6 +53,8 @@ defineProps<{
     size: string
   }
   markdown?: string
+  class?: string
+  ariaRole?: string
 }>()
 </script>
 
@@ -59,6 +67,16 @@ export default defineComponent({
 <styles lang="scss" scoped>
 :root {
   --avatar-size: 2.5rem;
+}
+
+.avatar-link {
+  align-self: flex-start;
+  border: solid 1px transparent;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  &:focus-visible {
+    border-color: var(--color-primary);
+  }
 }
 
 .avatar {
@@ -82,6 +100,10 @@ export default defineComponent({
     background-color: var(--color-secondary);
   }
 
+  &:focus-visible {
+    border-color: var(--color-primary);
+  }
+
   &::after,
   &::before {
     position: absolute;
@@ -101,6 +123,7 @@ export default defineComponent({
   align-items: center;
   display: flex;
   padding: 0.5rem 1rem;
+  gap: 0.5rem;
   background-color: var(--color-secondary);
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);

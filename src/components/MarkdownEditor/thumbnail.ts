@@ -1,8 +1,9 @@
-import { expectDomTypeError } from '@milkdown/exception'
-import { InputRule } from '@milkdown/prose/inputrules'
-import { $inputRule, $node } from '@milkdown/utils'
-import { $remark } from '@milkdown/utils'
-import directive from 'remark-directive'
+import { expectDomTypeError } from '@milkdown/exception';
+import { InputRule } from '@milkdown/prose/inputrules';
+import { $inputRule, $node } from '@milkdown/utils';
+import { $remark } from '@milkdown/utils';
+import directive from 'remark-directive';
+
 
 /// HTML attributes for thumbnail node.
 const INPUT_REGEX =
@@ -60,7 +61,6 @@ export const thumbnailNode = $node('thumbnail', () => ({
       tag: 'a[data-type="thumbnail"] div.thumbnail-wrapper img',
       getAttrs: (dom) => {
         if (!(dom instanceof HTMLElement)) throw expectDomTypeError(dom)
-        console.log(dom)
         return {
           src: dom.getAttribute('src') || '',
           alt: dom.getAttribute('alt') || '',

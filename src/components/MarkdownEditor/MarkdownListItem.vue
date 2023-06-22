@@ -69,8 +69,8 @@ input[type='checkbox'] {
   }
 
   &:focus-visible {
-    outline: max(2px, 0.15em) solid var(--color-primary);
-    outline-offset: max(2px, 0.15em);
+    outline: 0;
+    border: solid 1px var(--color-primary);
   }
 }
 </style>

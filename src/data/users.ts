@@ -1,4 +1,5 @@
-import type { UserProps } from '~/types'
+import type { UserProps } from '~/types';
+
 
 export const users = {
   kyle: {
@@ -8,6 +9,7 @@ export const users = {
     first_name: 'kyle',
     last_name: 'dumont',
     profile_url: '',
+    role: 'Owner',
   },
   morgan: {
     id: '123456789',
@@ -16,6 +18,7 @@ export const users = {
     first_name: 'morgan',
     last_name: 'ashly',
     profile_url: '#',
+    role: 'Contributor',
   },
 } as Record<string, UserProps>
 

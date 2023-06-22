@@ -1,7 +1,7 @@
 <template>
-  <header
+  <div
     role="toolbar"
-    aria-label="Text formatting"
+    aria-label="Text formatting toolbar press left arrow to enter"
     class="markdown-editor__toolbar"
     dir="ltr"
     v-kbd-trap.roving.horizontal
@@ -20,11 +20,11 @@
         :is="button.icon"
       />
     </button>
-  </header>
+  </div>
 </template>
 
 <script setup lang="ts">
-import type { CmdKey } from '@milkdown/core'
+import { type CmdKey } from '@milkdown/core'
 import {
   toggleEmphasisCommand,
   toggleStrongCommand,
@@ -34,8 +34,10 @@ import {
   wrapInOrderedListCommand,
 } from '@milkdown/preset-commonmark'
 import { toggleStrikethroughCommand } from '@milkdown/preset-gfm'
+import { callCommand } from '@milkdown/utils'
 import { VueKeyboardTrapDirectiveFactory } from '@pdanpdan/vue-keyboard-trap'
 
+import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
 import IconBold from '~/components/icons/bold.svg'
 import IconHeading from '~/components/icons/heading.svg'
 import IconItalic from '~/components/icons/italic.svg'
@@ -48,53 +50,67 @@ import IconStrike from '~/components/icons/strike.svg'
 
 const vKbdTrap = VueKeyboardTrapDirectiveFactory().directive
 
-const props = defineProps<{ call: <T>(command: CmdKey<T>, payload?: T) => boolean }>()
+const props = withDefaults(
+  defineProps<{
+    markdown?: string
+    onChange?: (markdown: string) => void
+  }>(),
+  {
+    markdown: '',
+  }
+)
+
+const { get } = useMilkdown(props.markdown, true, props.onChange)
+
+function call<T>(command: CmdKey<T>, payload?: T) {
+  return get()?.action(callCommand(command, payload))
+}
 
 const controlButtons = [
   {
     name: 'Heading',
     icon: IconHeading,
-    onClick: () => props.call(wrapInHeadingCommand.key),
+    onClick: () => call(wrapInHeadingCommand.key),
   },
   {
     name: 'Bold',
     icon: IconBold,
-    onClick: () => props.call(toggleStrongCommand.key),
+    onClick: () => call(toggleStrongCommand.key),
   },
   {
     name: 'Italic',
     icon: IconItalic,
-    onClick: () => props.call(toggleEmphasisCommand.key),
+    onClick: () => call(toggleEmphasisCommand.key),
   },
   {
     name: 'Strikethrough',
     icon: IconStrike,
-    onClick: () => props.call(toggleStrikethroughCommand.key),
+    onClick: () => call(toggleStrikethroughCommand.key),
   },
   {
     name: 'Quote',
     icon: IconQuote,
-    onClick: () => props.call(wrapInBlockquoteCommand.key),
+    onClick: () => call(wrapInBlockquoteCommand.key),
   },
   {
     name: 'Link',
     icon: IconLink,
-    // onClick: () => props.call(),
+    // onClick: () => call(),
   },
   {
     name: 'Unordered List',
     icon: IconListUL,
-    onClick: () => props.call(wrapInBulletListCommand.key),
+    onClick: () => call(wrapInBulletListCommand.key),
   },
   {
     name: 'Ordered List',
     icon: IconListOL,
-    onClick: () => props.call(wrapInOrderedListCommand.key),
+    onClick: () => call(wrapInOrderedListCommand.key),
   },
   {
     name: 'Task List',
     icon: IconListTask,
-    // onClick: () => props.call(wrapInTaskListCommand.key),
+    // onClick: () => call(wrapInTaskListCommand.key),
   },
 ]
 </script>
@@ -103,6 +119,7 @@ const controlButtons = [
 .markdown-editor__toolbar {
   display: flex;
   gap: 0.5rem;
+  z-index: 0;
 }
 
 .format-button {
@@ -124,10 +141,6 @@ const controlButtons = [
   &:hover {
     background-color: var(--color-secondary-light-1);
     color: var(--color-primary);
-  }
-  &:focus-visible {
-    outline: solid 1px var(--color-accent);
-    border-color: var(--color-accent);
   }
   &:active {
     color: var(--color-primary);

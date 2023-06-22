@@ -1,129 +1,195 @@
 <template>
-  <comment-block
-    class="editor-wrapper"
-    :user="user"
-  >
-    <template #header>
-      <markdown-toolbar
-        :call="call"
-        :aria-controls="`markdown-editor-${id}`"
-      />
-    </template>
-    <template #content>
-      <markdown-viewer
-        v-if="!showPlainText"
-        :id="`markdown-editor-${id}`"
-        class="markdown-editor"
-        :markdown="localMarkdown"
-        editable
-      />
+  <div class="markdown-editor">
+    <markdown-viewer
+      v-show="!showPlainText"
+      class="markdown-editor__content"
+      editable
+      :markdown="markdown"
+      :onChange="onChange"
+      :id="id"
+    />
 
-      <textarea
-        v-else
-        class="markdown-editor"
-        v-model="localMarkdown"
-        contenteditable
-      ></textarea>
-      <div class="editor-footer">
-        <div class="toggle-wrapper">
-          <SwitchGroup>
-            <Switch
-              v-model="showPlainText"
-              class="toggle"
-              :class="showPlainText ? 'checked' : ''"
-            >
-              <span
-                class="toggle__indicator"
-                :class="showPlainText ? 'checked' : ''"
-              />
-            </Switch>
-            <SwitchLabel>Use plain text</SwitchLabel>
-          </SwitchGroup>
-        </div>
-        <button class="button">Comment</button>
-      </div>
-    </template>
-  </comment-block>
+    <textarea
+      v-if="showPlainText"
+      class="markdown-editor__content markdown-editor__raw"
+      :value="markdown"
+      :onChange="onMarkdownChange"
+      contenteditable
+    ></textarea>
+
+    <!-- TODO: add Uploader to file selector https://milkdown.dev/docs/api/plugin-upload -->
+    <!-- <label class="file-uploader__label">
+      <input
+        accept=".gif,.jpeg,.jpg,.mov,.mp4,.png,.svg,.webm,.csv,.docx,.fodg,.fodp,.fods,.fodt,.gz,.log,.md,.odf,.odg,.odp,.ods,.odt,.patch,.pdf,.pptx,.tgz,.txt,.xls,.xlsx,.zip, .SchDoc"
+        type="file"
+        multiple
+        class="file-uploader__input"
+        id="file-upload"
+      />
+      <span>Attach files by dragging & dropping, selecting, or pasting them.</span>
+    </label> -->
+  </div>
+  <div class="editor-footer">
+    <div class="toggle-wrapper">
+      <SwitchGroup>
+        <Switch
+          v-model="showPlainText"
+          class="toggle"
+          :class="showPlainText ? 'checked' : ''"
+        >
+          <span
+            class="toggle__indicator"
+            :class="showPlainText ? 'checked' : ''"
+          />
+        </Switch>
+        <SwitchLabel>Use plain text</SwitchLabel>
+      </SwitchGroup>
+    </div>
+    <button v-if="onCancel" @click="onCancel" class="button button__cancel">Cancel</button>
+    <button class="button button__submit" @click="onSave">Comment</button>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
-import type { CmdKey } from '@milkdown/core'
-import { callCommand } from '@milkdown/utils'
+import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
+import { editorViewCtx, parserCtx } from '@milkdown/core'
+import { Slice } from '@milkdown/prose/model'
 import { ref } from 'vue'
 
-import CommentBlock from '~/components/CommentBlock.vue'
-import MarkdownToolbar from '~/components/MarkdownEditor/MarkdownToolbar.vue'
 import MarkdownViewer from '~/components/MarkdownEditor/MarkdownViewer.vue'
-import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
-import type { UserProps } from '~/types/index'
 
 const showPlainText = ref(false)
 
 const props = withDefaults(
   defineProps<{
-    id: string
-    user: UserProps
+    onCancel?: () => void
     markdown?: string
+    id: string
+    onChange?: (markdown: string) => void
+    onSave?: () => void
   }>(),
   {
-    markdown: '',
+    markdown: ''
   }
 )
+const { loading, get } = useMilkdown(props.markdown, true, props.onChange)
 
-const localMarkdown = ref(props.markdown)
-
-const { get } = useMilkdown(props.markdown, true)
-
-function call<T>(command: CmdKey<T>, payload?: T) {
-  return get()?.action(callCommand(command, payload))
+const onMarkdownChange = (event: Event) => {
+  const target = event.target as HTMLTextAreaElement
+  if (!target) return
+  const newValue = target.value
+  if (loading.value) return
+  const editor = get()
+  editor?.action((ctx) => {
+    const view = ctx.get(editorViewCtx)
+    const parser = ctx.get(parserCtx)
+    const doc = parser(newValue)
+    if (!doc) return
+    const state = view.state
+    view.dispatch(
+      state.tr.replace(
+        0,
+        state.doc.content.size,
+        new Slice(doc.content, 0, 0)
+      )
+    )
+  })
 }
 </script>
 
 <style lang="scss">
-.editor-wrapper {
-  border-top: solid 4px var(--color-secondary);
-  padding-top: 2rem;
-  margin-top: 1rem;
-}
-
 .markdown-editor {
   border-radius: var(--border-radius);
   border: solid 1px var(--color-secondary);
   display: flex;
   flex-direction: column;
-  line-height: 1.5;
-  max-width: 100%;
-  padding: 1rem;
-  position: relative;
-  white-space: pre-wrap;
+  &:focus-within {
+    border-color: var(--color-primary);
+
+    .file-uploader__label {
+      border-top-color: var(--color-primary);
+    }
+  }
+  &__content {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.5;
+    max-width: 100%;
+    padding: 1rem;
+    position: relative;
+    white-space: pre-wrap;
+    width: 100%;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    white-space: pre-wrap;
+    position: relative;
+    word-wrap: break-word;
+    line-height: 1.5;
+    max-width: 100%;
+    min-height: 32rem;
+  }
+  &__raw {
+    resize: vertical;
+  }
+}
+
+.file-uploader__label {
+  cursor: pointer;
+  padding: 0.5rem;
+  margin: 0;
+  font-size: 0.825rem;
+  line-height: 1rem;
+  background-color: var(--color-body);
+  border-top: 1px dashed var(--color-secondary);
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
   width: 100%;
-  word-wrap: break-word;
-  display: flex;
-  flex-direction: column;
-  white-space: pre-wrap;
   position: relative;
-  word-wrap: break-word;
-  line-height: 1.5;
-  max-width: 100%;
-  min-height: 20rem;
+}
+
+.file-uploader__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .editor-footer {
   display: flex;
   margin-top: 2rem;
   align-items: flex-end;
+  gap: 1rem;
 }
 
 .button {
-  background-color: var(--color-accent);
   border-radius: var(--border-radius);
   padding: 0.75rem 1.5rem;
-  margin-left: auto;
   margin-right: 0;
-  &:hover {
-    cursor: pointer;
-    background-color: var(--color-primary-light-2);
+  &__submit {
+    background-color: var(--color-primary);
+    color: var(--color-box-body);
+    &:hover {
+      cursor: pointer;
+      background-color: var(--color-primary-light-2);
+    }
+  }
+  &__cancel {
+    margin-left: auto;
+    &:hover {
+      cursor: pointer;
+      background-color: var(--color-box-body-highlight);
+    }
+  }
+  &:focus-visible {
+    outline: solid 1px var(--color-text);
+    outline-offset: -0.33rem;
   }
 }
 
@@ -153,8 +219,8 @@ function call<T>(command: CmdKey<T>, payload?: T) {
     border-color: var(--color-primary);
   }
   &:focus-visible {
-    outline: solid 1px var(--color-accent);
-    border-color: var(--color-accent);
+    outline: solid 1px var(--color-primary);
+    border-color: var(--color-primary);
   }
 
   &.checked {

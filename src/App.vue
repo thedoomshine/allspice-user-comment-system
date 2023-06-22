@@ -1,9 +1,6 @@
-<script setup lang="ts">
-import IssuePage from '~/components/IssuePage.vue'
-</script>
-
 <template>
-  <header class="app-header">
+  <header class="app-header" aria-label="Website Navigation press left arrow to enter" dir="ltr"
+    v-kbd-trap.roving.horizontal>
     <a
       href="#"
       class="nav-item logo"
@@ -45,6 +42,13 @@ import IssuePage from '~/components/IssuePage.vue'
 
   <issue-page />
 </template>
+
+<script setup lang="ts">
+import { VueKeyboardTrapDirectiveFactory } from '@pdanpdan/vue-keyboard-trap'
+import IssuePage from '~/components/IssuePage.vue'
+
+const vKbdTrap = VueKeyboardTrapDirectiveFactory().directive
+</script>
 
 <style lang="scss">
 :root {

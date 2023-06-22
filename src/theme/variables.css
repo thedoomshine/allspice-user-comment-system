@@ -11,10 +11,6 @@
   --font-size-h4: 1.07142857rem;
   --font-size-h5: 1rem;
 
-  --breakpoints-mobile: 768px;
-  --breakpoints-laptop: 1280px;
-  --breakpoints-desktop: 1600px;
-
   --color-primary: #87ab63;
   --color-primary-contrast: #ffffff;
   --color-primary-dark-1: #93b373;

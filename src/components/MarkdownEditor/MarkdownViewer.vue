@@ -11,6 +11,7 @@ const props = withDefaults(
   defineProps<{
     markdown?: string
     editable?: boolean
+    onChange?: (markdown: string) => void
   }>(),
   {
     markdown: '',
@@ -18,11 +19,18 @@ const props = withDefaults(
   }
 )
 
-useMilkdown(props.markdown, props.editable)
+useMilkdown(props.markdown, props.editable, props.onChange)
 </script>
 
 <styles lang="scss" scoped>
 .milkdown {
+  &,
+  .editor {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    height: 100%;
+  }
   .editor > :first-child {
     margin-top: 0;
   }
@@ -117,13 +125,14 @@ useMilkdown(props.markdown, props.editable)
   li {
     display: list-item;
     gap: 0.5rem;
+    margin: 0.25rem 0;
 
     p {
       margin: 0;
     }
   }
 
-  ul[data-type="taskList"] li {
+  ul[data-type='taskList'] li {
     display: inline-flex;
     align-items: center;
   }

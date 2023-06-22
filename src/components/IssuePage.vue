@@ -16,85 +16,46 @@
       </div>
     </div>
     <div class="issue-feed">
-      <comment-block
-        v-for="{ id, attachment, user, posted_at, role, markdown } in userData"
-        :key="id"
-        :user="user"
-        :attachment="attachment"
+      <div
+        class="issues"
+        role="group"
       >
-        <template #header>
-          <p>
-            <a
-              :href="user.profile_url"
-              class="user-link"
-              >{{ user.display_name }}</a
-            >
-            commented
-            <span class="time-distance">{{ formatDistanceToNow(new Date(posted_at)) }} ago</span>
-          </p>
-          <div class="role-label">{{ role }}</div>
-        </template>
+        <comment
+          ariaRole="listitem"
+          v-for="{ id, attachment, user, posted_at, role, markdown } in userComments"
+          :key="id"
+          :id="id"
+          :user="user"
+          :attachment="attachment"
+          :markdown="markdown"
+          :posted_at="posted_at"
+          @submit="handleSubmit"
+        />
+      </div>
 
-        <template #content>
-          <milkdown-provider>
-            <prosemirror-adapter-provider>
-              <markdown-viewer :markdown="markdown" />
-            </prosemirror-adapter-provider>
-          </milkdown-provider>
-        </template>
-      </comment-block>
-
-      <milkdown-provider>
-        <prosemirror-adapter-provider>
-          <markdown-editor
-            :id="uuid"
-            :user="currentUser"
-            :markdown="`# yeag 🐰 🖤
-
-![allspice](https://images.ctfassets.net/3s5io6mnxfqz/mRfZFyrCxr37N7kmOP9ws/0ceaa2bbaa53712a8107a33cbe6a2cbc/AdobeStock_193176677.jpeg?w=828)
-
-**goth** *bitch* ***on patrol***
-
-[link](https://allspice.io)
-
-- [x] completed
-
-***
-
-## level 2
-
->> you miss 100% of the shots you never take
->
-> wayne gretzky
->
-michael scott
-
-> blockquote
->> blockquote blockquote
-`"
-          />
-        </prosemirror-adapter-provider>
-      </milkdown-provider>
+      <new-comment @submit="handleSubmit" />
     </div>
     <issue-meta class="issue-meta" />
   </main>
 </template>
 
 <script setup lang="ts">
-import { MilkdownProvider } from '@milkdown/vue'
-import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
-import { formatDistanceToNow } from 'date-fns'
+import { onMounted, ref } from 'vue'
 
-import CommentBlock from '~/components/CommentBlock.vue'
+import Comment from '~/components/Comment/Comment.vue'
+import NewComment from '~/components/Comment/NewComment.vue'
 import IssueMeta from '~/components/IssueMeta.vue'
-import MarkdownEditor from '~/components/MarkdownEditor/MarkdownEditor.vue'
-import MarkdownViewer from '~/components/MarkdownEditor/MarkdownViewer.vue'
-import userData from '~/data/comments'
-import { currentUser } from '~/data/users'
+import { fetchComments } from '~/utils/commentsApiMethods'
 
-const uuid = Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) =>
-  ('0' + (byte & 0xff).toString(16)).slice(-2)
-).join('')
+const userComments = ref()
+
+const handleSubmit = () => {
+  userComments.value = fetchComments()
+}
+
+onMounted(() => {
+  userComments.value = fetchComments()
+})
 </script>
 
 <style lang="scss">
@@ -103,9 +64,12 @@ const uuid = Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) =>
   grid-template-areas:
     'header  header  header  header'
     '.       title   title   .     '
-    '.       main    aside   .     ';
+    '.       main    main    .     '
+    '.       aside   aside   .     ';
+
   grid-template-columns: var(--grid-gutter) 3fr 1fr var(--grid-gutter);
   column-gap: 2rem;
+  row-gap: 1rem;
 
   width: 100%;
   max-width: 100vw;
@@ -137,16 +101,27 @@ const uuid = Array.from(crypto.getRandomValues(new Uint8Array(16)), (byte) =>
   border-bottom: solid 1px var(--color-secondary);
 }
 
-.issue-feed {
+.issue-feed,
+.issues {
   display: flex;
   grid-area: main;
   flex: 1 1 auto;
   flex-direction: column;
-  gap: 1rem;
+  gap: 2rem;
 }
 
 .issue-meta {
   grid-area: aside;
   border-radius: var(--border-radius);
+}
+
+@media only screen and (min-width: 1280px) {
+  .issue-page {
+    grid-template-areas:
+      'header  header  header  header'
+      '.       title   title   .     '
+      '.       main    aside   .     ';
+    row-gap: 0;
+  }
 }
 </style>

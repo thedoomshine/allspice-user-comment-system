@@ -1,13 +1,9 @@
 export type CommentProps = {
-  attachment?: {
-    url: string
-    title: string
-    size: string
-  }
+  attachment?: AttachmentProps
   id: string
   markdown: string
   posted_at: string
-  role: string
+  edited_at?: string
 } & { user: UserProps }
 
 export type UserProps = {
@@ -17,4 +13,11 @@ export type UserProps = {
   first_name: string
   last_name: string
   profile_url: string
+  role: string
+}
+
+export type AttachmentProps = {
+  url: string
+  title: string
+  size: string
 }
