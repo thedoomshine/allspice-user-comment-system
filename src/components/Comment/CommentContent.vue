@@ -47,17 +47,13 @@
     </template>
 
     <template #content>
-      <markdown-viewer
-        v-if="!editComment"
-        :markdown="markdown"
-      />
       <markdown-editor
-        v-else
+        :editable="editComment"
         :markdown="markdown"
-        id="markdown-editor__new"
         :onCancel="handleOnCancel"
         :onChange="handleOnChange"
         :onSave="handleOnSave"
+        id="markdown-editor__new"
       />
     </template>
   </comment-block>
@@ -71,10 +67,10 @@ import { ref } from 'vue'
 import CommentBlock from '~/components/Comment/CommentBlock.vue'
 import MarkdownEditor from '~/components/MarkdownEditor/MarkdownEditor.vue'
 import MarkdownToolbar from '~/components/MarkdownEditor/MarkdownToolbar.vue'
-import MarkdownViewer from '~/components/MarkdownEditor/MarkdownViewer.vue'
 import IconKebab from '~/components/icons/kebab.svg'
 import { currentUser } from '~/data/users'
 import type { CommentProps } from '~/types'
+
 import { updateComment } from '../../utils/commentsApiMethods'
 
 const props = defineProps<CommentProps & { ariaRole?: string }>()
@@ -113,9 +109,11 @@ const handleOnChange = (value: string) => {
 .popover-button {
   display: flex;
   align-items: center;
-  border-radius: var(--border-radius);
-  padding: 0.5rem;
+
   margin: 0;
+  padding: 0.5rem;
+
+  border-radius: var(--border-radius);
   &:hover {
     cursor: pointer;
     background-color: var(--color-secondary-dark-2);
@@ -124,35 +122,36 @@ const handleOnChange = (value: string) => {
 
 .popover-panel {
   position: absolute;
+  top: calc(100% + 0.125rem);
+  right: 0;
+
+  padding: 0.25rem 0;
+
+  white-space: nowrap;
+
   background-color: var(--color-box-body);
   border: solid 1px var(--color-secondary);
   border-radius: var(--border-radius);
-  right: 0;
-  top: calc(100% + 0.125rem);
-  padding: 0.25rem 0;
-  white-space: nowrap;
 
   &::after,
   &::before {
     content: '';
-    display: inline-block;
     position: absolute;
+    display: inline-block;
   }
   &::after {
-    left: auto;
-    right: 10px;
     top: -14px;
-  }
-  &::after {
+    right: 10px;
+    left: auto;
+
     border: 7px solid transparent;
     border-bottom: 7px solid var(--color-box-body);
   }
   &::before {
-    left: auto;
-    right: 9px;
     top: -16px;
-  }
-  &::before {
+    right: 9px;
+    left: auto;
+
     border: 8px solid transparent;
     border-bottom: 8px solid var(--color-box-body);
   }

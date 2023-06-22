@@ -1,4 +1,4 @@
-import { Editor, defaultValueCtx, editorViewOptionsCtx, rootCtx } from '@milkdown/core';
+import { Editor, defaultValueCtx, editorViewOptionsCtx, rootCtx } from '@milkdown/core'
 import { clipboard } from '@milkdown/plugin-clipboard'
 import { cursor, dropCursorConfig } from '@milkdown/plugin-cursor'
 import { history } from '@milkdown/plugin-history'
@@ -9,10 +9,9 @@ import { gfm } from '@milkdown/preset-gfm'
 import { $view } from '@milkdown/utils'
 import { useEditor } from '@milkdown/vue'
 import { useNodeViewFactory } from '@prosemirror-adapter/vue'
-import debounce from 'lodash.debounce'
 
 import MarkdownListItem from '~/components/MarkdownEditor/MarkdownListItem.vue'
-import thumbnail from '~/components/MarkdownEditor/thumbnail.ts'
+import thumbnail from '~/components/MarkdownEditor/marks/thumbnail'
 
 export const useMilkdown = (
   markdown: string,

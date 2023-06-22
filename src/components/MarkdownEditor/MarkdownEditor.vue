@@ -1,17 +1,13 @@
 <template>
-  <div class="markdown-editor">
-    <markdown-viewer
+  <div :class="clsx('markdown-editor', { editable: editable })">
+    <milkdown
       v-show="!showPlainText"
-      class="markdown-editor__content"
-      editable
-      :markdown="markdown"
-      :onChange="onChange"
       :id="id"
     />
 
     <textarea
       v-if="showPlainText"
-      class="markdown-editor__content markdown-editor__raw"
+      class="markdown-editor__raw"
       :value="markdown"
       :onChange="onMarkdownChange"
       contenteditable
@@ -29,7 +25,10 @@
       <span>Attach files by dragging & dropping, selecting, or pasting them.</span>
     </label> -->
   </div>
-  <div class="editor-footer">
+  <div
+    class="editor-footer"
+    v-if="editable"
+  >
     <div class="toggle-wrapper">
       <SwitchGroup>
         <Switch
@@ -45,35 +44,49 @@
         <SwitchLabel>Use plain text</SwitchLabel>
       </SwitchGroup>
     </div>
-    <button v-if="onCancel" @click="onCancel" class="button button__cancel">Cancel</button>
-    <button class="button button__submit" @click="onSave">Comment</button>
+    <button
+      v-if="onCancel"
+      @click="onCancel"
+      class="button button__cancel"
+    >
+      Cancel
+    </button>
+    <button
+      class="button button__submit"
+      @click="onSave"
+    >
+      Comment
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
 import { Switch, SwitchGroup, SwitchLabel } from '@headlessui/vue'
-import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
 import { editorViewCtx, parserCtx } from '@milkdown/core'
 import { Slice } from '@milkdown/prose/model'
+import { Milkdown } from '@milkdown/vue'
+import clsx from 'clsx'
 import { ref } from 'vue'
 
-import MarkdownViewer from '~/components/MarkdownEditor/MarkdownViewer.vue'
+import { useMilkdown } from '~/components/MarkdownEditor/utils/useMilkdown'
 
 const showPlainText = ref(false)
 
 const props = withDefaults(
   defineProps<{
-    onCancel?: () => void
-    markdown?: string
+    editable?: boolean
     id: string
+    markdown?: string
+    onCancel?: () => void
     onChange?: (markdown: string) => void
     onSave?: () => void
   }>(),
   {
-    markdown: ''
+    markdown: '',
+    editable: false,
   }
 )
-const { loading, get } = useMilkdown(props.markdown, true, props.onChange)
+const { loading, get } = useMilkdown(props.markdown, props.editable, props.onChange)
 
 const onMarkdownChange = (event: Event) => {
   const target = event.target as HTMLTextAreaElement
@@ -87,94 +100,107 @@ const onMarkdownChange = (event: Event) => {
     const doc = parser(newValue)
     if (!doc) return
     const state = view.state
-    view.dispatch(
-      state.tr.replace(
-        0,
-        state.doc.content.size,
-        new Slice(doc.content, 0, 0)
-      )
-    )
+    view.dispatch(state.tr.replace(0, state.doc.content.size, new Slice(doc.content, 0, 0)))
   })
 }
 </script>
 
 <style lang="scss">
+@import './styles/markdown-styles';
+
+.ProseMirror.editor {
+  flex: 1 1 auto;
+  height: 100%;
+}
+
+.file-uploader__label {
+  cursor: pointer;
+
+  position: relative;
+
+  width: 100%;
+  margin: 0;
+  padding: 0.5rem;
+
+  font-size: 0.825rem;
+  line-height: 1rem;
+
+  background-color: var(--color-body);
+  border-top: 1px dashed var(--color-secondary);
+  border-bottom-right-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+}
+
+.file-uploader__input {
+  position: absolute;
+
+  overflow: hidden;
+
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+
+  white-space: nowrap;
+
+  clip: rect(0, 0, 0, 0);
+  border-width: 0;
+}
+
 .markdown-editor {
-  border-radius: var(--border-radius);
-  border: solid 1px var(--color-secondary);
   display: flex;
   flex-direction: column;
-  &:focus-within {
-    border-color: var(--color-primary);
 
-    .file-uploader__label {
-      border-top-color: var(--color-primary);
+  &.editable {
+    border: solid 1px var(--color-secondary);
+    border-radius: var(--border-radius);
+    &:focus-within {
+      border-color: var(--color-primary);
+
+      .file-uploader__label {
+        border-top-color: var(--color-primary);
+      }
+    }
+
+    .milkdown,
+    .markdown-editor__raw {
+      padding: 1rem;
     }
   }
-  &__content {
+  .milkdown,
+  .markdown-editor__raw {
+    position: relative;
+
     display: flex;
     flex-direction: column;
-    line-height: 1.5;
-    max-width: 100%;
-    padding: 1rem;
-    position: relative;
-    white-space: pre-wrap;
+
     width: 100%;
-    word-wrap: break-word;
-    display: flex;
-    flex-direction: column;
-    white-space: pre-wrap;
-    position: relative;
-    word-wrap: break-word;
-    line-height: 1.5;
     max-width: 100%;
     min-height: 32rem;
+
+    line-height: 1.5;
+    word-wrap: break-word;
+    white-space: pre-wrap;
   }
   &__raw {
     resize: vertical;
   }
 }
 
-.file-uploader__label {
-  cursor: pointer;
-  padding: 0.5rem;
-  margin: 0;
-  font-size: 0.825rem;
-  line-height: 1rem;
-  background-color: var(--color-body);
-  border-top: 1px dashed var(--color-secondary);
-  border-bottom-right-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
-  width: 100%;
-  position: relative;
-}
-
-.file-uploader__input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
-
 .editor-footer {
   display: flex;
-  margin-top: 2rem;
-  align-items: flex-end;
   gap: 1rem;
+  align-items: flex-end;
+  margin-top: 2rem;
 }
 
 .button {
-  border-radius: var(--border-radius);
-  padding: 0.75rem 1.5rem;
   margin-right: 0;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
   &__submit {
-    background-color: var(--color-primary);
     color: var(--color-box-body);
+    background-color: var(--color-primary);
     &:hover {
       cursor: pointer;
       background-color: var(--color-primary-light-2);
@@ -195,50 +221,59 @@ const onMarkdownChange = (event: Event) => {
 
 .toggle-wrapper {
   display: inline-flex;
-  align-items: center;
   gap: 0.5rem;
+  align-items: center;
   label {
     font-size: 0.9rem;
   }
 }
 
 .toggle {
-  position: relative;
-  display: inline-flex;
-  border-radius: 1.75rem;
-  border: solid 1px var(--color-text);
-  height: 1.75rem;
-  aspect-ratio: 1.75/1;
-  padding: 0.25rem;
   cursor: pointer;
-  color: var(--color-grey-light);
+
+  position: relative;
+
+  display: inline-flex;
   flex: 0 0 auto;
+
+  aspect-ratio: 1.75/1;
+  height: 1.75rem;
+  padding: 0.25rem;
+
+  color: var(--color-grey-light);
+
+  border: solid 1px var(--color-text);
+  border-radius: 1.75rem;
 
   &:hover {
     background-color: var(--color-secondary-light-1);
     border-color: var(--color-primary);
   }
   &:focus-visible {
-    outline: solid 1px var(--color-primary);
     border-color: var(--color-primary);
+    outline: solid 1px var(--color-primary);
   }
 
   &.checked {
-    background-color: var(--color-primary-light-5);
     color: var(--color-primary);
+    background-color: var(--color-primary-light-5);
   }
 }
 
 .toggle__indicator {
+  will-change: transform;
+
   display: inline-block;
+
   aspect-ratio: 1;
   height: 100%;
-  border-radius: 100%;
+
   background-color: currentColor;
-  will-change: transform;
-  transition-property: transform, color;
+  border-radius: 100%;
+
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+  transition-property: transform, color;
 
   &.checked {
     transform: translateX(1.25rem);
@@ -248,8 +283,9 @@ const onMarkdownChange = (event: Event) => {
 .thumbnail-wrapper {
   float: left;
   overflow: hidden;
-  height: 220.283px;
+
   width: 250px;
+  height: 220.283px;
   margin-right: 1rem;
 
   img {

@@ -13,7 +13,7 @@
       aria-pressed="false"
       :value="button.name"
       class="format-button"
-      @click="button.onClick"
+      @click.prevent="button.onClick"
     >
       <component
         class="icon"
@@ -38,7 +38,7 @@ import { callCommand } from '@milkdown/utils'
 // @ts-ignore
 import { VueKeyboardTrapDirectiveFactory } from '@pdanpdan/vue-keyboard-trap'
 
-import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
+import { useMilkdown } from '~/components/MarkdownEditor/utils/useMilkdown'
 import IconBold from '~/components/icons/bold.svg'
 import IconHeading from '~/components/icons/heading.svg'
 import IconItalic from '~/components/icons/italic.svg'
@@ -71,7 +71,7 @@ const controlButtons = [
   {
     name: 'Heading',
     icon: IconHeading,
-    onClick: () => call(wrapInHeadingCommand.key),
+    onClick: () => call(wrapInHeadingCommand.key, 1),
   },
   {
     name: 'Bold',
@@ -149,3 +149,4 @@ const controlButtons = [
   }
 }
 </styles>
+~/components/MarkdownEditor/utils/useMilkdown

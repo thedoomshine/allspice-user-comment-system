@@ -16,6 +16,7 @@
         :onChange="handleOnChange"
         :onSave="handleOnSave"
         id="markdown-editor__new"
+        :editable="true"
       />
     </template>
   </comment-block>
@@ -50,8 +51,8 @@ const handleOnSave = async () => {
 
 <style lang="scss">
 .new-comment {
-  border-top: solid 4px var(--color-secondary);
-  padding-top: 2rem;
   margin-top: 0rem;
+  padding-top: 2rem;
+  border-top: solid 4px var(--color-secondary);
 }
 </style>

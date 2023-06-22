@@ -20,9 +20,9 @@
         class="issues"
         role="group"
       >
-        <comment
+        <comment-content
           ariaRole="listitem"
-          v-for="{ id, attachment, user, posted_at, role, markdown } in userComments"
+          v-for="{ id, attachment, user, posted_at, markdown } in userComments"
           :key="id"
           :id="id"
           :user="user"
@@ -42,7 +42,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-import Comment from '~/components/Comment/Comment.vue'
+import CommentContent from '~/components/Comment/CommentContent.vue'
 import NewComment from '~/components/Comment/NewComment.vue'
 import IssueMeta from '~/components/IssueMeta.vue'
 import { fetchComments } from '~/utils/commentsApiMethods'
@@ -66,10 +66,9 @@ onMounted(() => {
     '.       title   title   .     '
     '.       main    main    .     '
     '.       aside   aside   .     ';
-
   grid-template-columns: var(--grid-gutter) 3fr 1fr var(--grid-gutter);
-  column-gap: 2rem;
   row-gap: 1rem;
+  column-gap: var(--column-gap);
 
   width: 100%;
   max-width: 100vw;
@@ -81,7 +80,7 @@ onMounted(() => {
   grid-area: header;
   grid-template-areas: '. content .';
   grid-template-columns: var(--grid-gutter) auto var(--grid-gutter);
-  column-gap: 2rem;
+  column-gap: var(--column-gap);
 
   width: 100%;
   padding: 1rem 0;

@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [vue(), svgLoader()],
   css: {
     postcss: {
-      plugins: [require('postcss-html'), require('postcss-sorting')],
+      plugins: [require('postcss-html'), require('postcss-sorting'), require('postcss-nesting')],
     },
   },
   resolve: {

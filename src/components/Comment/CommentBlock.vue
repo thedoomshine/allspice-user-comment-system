@@ -1,49 +1,51 @@
 <template>
-  <milkdown-provider>
-    <prosemirror-adapter-provider>
-      <div class="comment-block" :class="class" :ariaRole="ariaRole">
-        <a class="avatar-link" :href="user.profile_url">
-          <img
-            class="avatar"
-            :src="user.profile_image"
-            :alt="`${user.first_name} ${user.last_name}`"
+  <div
+    class="comment-block"
+    :ariaRole="ariaRole"
+  >
+    <a
+      class="avatar-link"
+      :href="user.profile_url"
+    >
+      <img
+        class="avatar"
+        :src="user.profile_image"
+        :alt="`${user.first_name} ${user.last_name}`"
+      />
+    </a>
+    <markdown-provider>
+      <div class="comment">
+        <header class="comment-header">
+          <slot name="header" />
+        </header>
+        <div class="comment-content">
+          <slot
+            name="content"
+            :markdown="markdown"
           />
-        </a>
-        <div class="comment">
-          <header class="comment-header">
-            <slot name="header" />
-          </header>
-          <div class="comment-content">
-            <slot
-              name="content"
-              :markdown="markdown"
-            />
 
-            <div
-              v-if="attachment?.url"
-              class="dropzone-attachments"
+          <div
+            v-if="attachment?.url"
+            class="dropzone-attachments"
+          >
+            <a
+              :href="attachment.url"
+              class="attachment-url"
+              ><file-icon class="icon" />{{ attachment.title }}</a
             >
-              <a
-                :href="attachment.url"
-                class="attachment-url"
-                ><file-icon class="icon" />{{ attachment.title }}</a
-              >
-              <span class="attachment-size">{{ attachment.size }}</span>
-            </div>
+            <span class="attachment-size">{{ attachment.size }}</span>
           </div>
-          <slot />
         </div>
+        <slot />
       </div>
-    </prosemirror-adapter-provider>
-  </milkdown-provider>
+    </markdown-provider>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { MilkdownProvider } from '@milkdown/vue'
-import { ProsemirrorAdapterProvider } from '@prosemirror-adapter/vue'
-import { defineComponent } from 'vue'
-import type { UserProps } from '~/types'
+import MarkdownProvider from '~/components/MarkdownEditor/MarkdownProvider.vue'
 import FileIcon from '~/components/icons/file.svg'
+import type { UserProps } from '~/types'
 
 defineProps<{
   user: UserProps
@@ -56,12 +58,6 @@ defineProps<{
   class?: string
   ariaRole?: string
 }>()
-</script>
-
-<script lang="ts">
-export default defineComponent({
-  name: 'CommentBlock',
-})
 </script>
 
 <styles lang="scss" scoped>

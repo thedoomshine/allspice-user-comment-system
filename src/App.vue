@@ -1,6 +1,10 @@
 <template>
-  <header class="app-header" aria-label="Website Navigation press left arrow to enter" dir="ltr"
-    v-kbd-trap.roving.horizontal>
+  <header
+    class="app-header"
+    aria-label="Website Navigation press left arrow to enter"
+    dir="ltr"
+    v-kbd-trap.roving.horizontal
+  >
     <a
       href="#"
       class="nav-item logo"
@@ -8,7 +12,7 @@
       <img
         alt="Allspice"
         class="logo"
-        src="./assets/logo.svg"
+        :src="imgUrl"
       />
     </a>
     <nav class="nav-bar">
@@ -46,21 +50,26 @@
 <script setup lang="ts">
 // @ts-ignore
 import { VueKeyboardTrapDirectiveFactory } from '@pdanpdan/vue-keyboard-trap'
+
 import IssuePage from '~/components/IssuePage.vue'
 
 const vKbdTrap = VueKeyboardTrapDirectiveFactory().directive
+
+const imgUrl = new URL('~/assets/logo.svg', import.meta.url).href
 </script>
 
 <style lang="scss">
 :root {
   --grid-gutter: 0.5rem;
   --border-radius: 0.35rem;
+  --column-gap: 0.5rem;
 }
 
-@media screen only and (min-width: 1280px) {
-	:root {
-	  --grid-gutter: calc(25vw - 16rem);
-	}
+@media only screen and (min-width: 1280px) {
+  :root {
+    --grid-gutter: calc(25vw - 16rem);
+    --column-gap: 2rem;
+  }
 }
 
 .app-header {
@@ -115,7 +124,7 @@ const vKbdTrap = VueKeyboardTrapDirectiveFactory().directive
 
 @media only screen and (min-width: 1280px) {
   .nav-bar {
-		display: flex;
-	}
+    display: flex;
+  }
 }
 </style>

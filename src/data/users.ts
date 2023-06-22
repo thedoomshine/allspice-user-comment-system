@@ -1,5 +1,4 @@
-import type { UserProps } from '~/types';
-
+import type { UserProps } from '~/types'
 
 export const users = {
   kyle: {

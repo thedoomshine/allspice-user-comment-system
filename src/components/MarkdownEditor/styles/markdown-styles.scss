@@ -1,36 +1,8 @@
-<template>
-  <milkdown />
-</template>
-
-<script setup lang="ts">
-import { Milkdown } from '@milkdown/vue'
-
-import { useMilkdown } from '~/components/MarkdownEditor/useMilkdown'
-
-const props = withDefaults(
-  defineProps<{
-    markdown?: string
-    editable?: boolean
-    onChange?: (markdown: string) => void
-  }>(),
-  {
-    markdown: '',
-    editable: false,
-  }
-)
-
-useMilkdown(props.markdown, props.editable, props.onChange)
-</script>
-
-<styles lang="scss" scoped>
 .milkdown {
-  &,
-  .editor {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    height: 100%;
-  }
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  height: 100%;
   .editor > :first-child {
     margin-top: 0;
   }
@@ -41,11 +13,13 @@ useMilkdown(props.markdown, props.editable, props.onChange)
   h4,
   h5,
   h6 {
-    padding-bottom: 0.3em;
-    margin-bottom: 1rem;
-    margin-top: 1.5rem;
-    line-height: 1.15;
     clear: both;
+
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3em;
+
+    line-height: 1.15;
   }
 
   h1,
@@ -83,9 +57,11 @@ useMilkdown(props.markdown, props.editable, props.onChange)
   pre,
   details {
     display: block;
+
+    max-width: 80ch;
     margin-top: 0;
     margin-bottom: 1rem;
-    max-width: 80ch;
+
     overflow-wrap: anywhere;
   }
 
@@ -116,10 +92,10 @@ useMilkdown(props.markdown, props.editable, props.onChange)
 
   ol,
   ul {
-    padding-left: 1.5rem;
     display: flex;
     flex-direction: column;
     margin-bottom: 1rem;
+    padding-left: 1.5rem;
   }
 
   li {
@@ -148,8 +124,8 @@ useMilkdown(props.markdown, props.editable, props.onChange)
   blockquote {
     display: flex;
     flex-direction: column;
-    border-left: solid 0.25rem var(--color-secondary);
     padding-left: 0.5rem;
+    border-left: solid 0.25rem var(--color-secondary);
     & > :last-child {
       margin-bottom: 0;
     }
@@ -157,8 +133,8 @@ useMilkdown(props.markdown, props.editable, props.onChange)
 
   hr {
     height: 0.25em;
-    padding: 0;
     margin: 2rem 0;
+    padding: 0;
     background-color: var(--color-secondary);
   }
 
@@ -181,48 +157,56 @@ useMilkdown(props.markdown, props.editable, props.onChange)
   li > code,
   dd > code,
   td > code {
-    background: var(--color-black);
-    color: var(--color-white);
-    box-decoration-break: clone;
-    border-radius: var(--border-radius);
-    padding: 0.2em 0.4em;
     margin: 0;
+    padding: 0.2em 0.4em;
+
     font-size: 90%;
+    color: var(--color-white);
     white-space: break-spaces;
+
+    background: var(--color-black);
+    border-radius: var(--border-radius);
+    box-decoration-break: clone;
   }
 
   pre {
-    padding: 1rem;
     overflow: auto;
+
+    padding: 1rem;
+
     font-size: 90%;
     line-height: 1.45;
     color: var(--color-white);
+
     background-color: var(--color-black);
     border-radius: var(--border-radius);
   }
 
   pre code {
-    -webkit-overflow-scrolling: touch;
-    font-size: 90%;
-    margin: 0;
     overflow: visible;
-    padding: 0.2em 0.4em;
-    white-space: break-spaces;
-
     display: inline;
+
+    margin: 0;
+    padding: 0.2em 0.4em;
     padding: 0;
+
+    font-size: 90%;
     line-height: inherit;
     word-wrap: normal;
+    white-space: break-spaces;
+
+    -webkit-overflow-scrolling: touch;
   }
 
   table {
-    border-collapse: collapse;
-    table-layout: fixed;
-    margin: 0;
     overflow: hidden;
-    display: block;
-    width: 100%;
     overflow: auto;
+    display: block;
+    table-layout: fixed;
+    border-collapse: collapse;
+
+    width: 100%;
+    margin: 0;
     p {
       margin: 0;
     }
@@ -234,9 +218,9 @@ useMilkdown(props.markdown, props.editable, props.onChange)
 
     th,
     td {
+      position: relative;
       padding: 0.5rem 1rem;
       border: 1px solid var(--color-secondary);
-      position: relative;
     }
 
     tr {
@@ -254,4 +238,3 @@ useMilkdown(props.markdown, props.editable, props.onChange)
     padding-left: 1rem;
   }
 }
-</styles>

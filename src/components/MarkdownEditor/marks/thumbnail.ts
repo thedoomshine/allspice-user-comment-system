@@ -1,9 +1,8 @@
-import { expectDomTypeError } from '@milkdown/exception';
-import { InputRule } from '@milkdown/prose/inputrules';
-import { $inputRule, $node } from '@milkdown/utils';
-import { $remark } from '@milkdown/utils';
-import directive from 'remark-directive';
-
+import { expectDomTypeError } from '@milkdown/exception'
+import { InputRule } from '@milkdown/prose/inputrules'
+import { $inputRule, $node } from '@milkdown/utils'
+import { $remark } from '@milkdown/utils'
+import directive from 'remark-directive'
 
 /// HTML attributes for thumbnail node.
 const INPUT_REGEX =
